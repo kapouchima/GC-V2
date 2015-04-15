@@ -1,0 +1,14 @@
+main
+	__CC2DW
+	Init
+		Lcd_Init
+			Delay_5500us
+			Delay_1us
+		UART1_Init
+		UART2_Init
+		SignalingSystem_Init
+			Mul_16x16_U
+	SignalingSystem_SystemEPOCH
+	SignalingSystem_Task
+		Mul_16x16_U
+interrupt
