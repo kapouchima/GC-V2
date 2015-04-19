@@ -1,0 +1,120 @@
+[DEVICE]
+Name=P18F45K80
+Clock=32000000
+[MEMORY_MODEL]
+Value=-1
+[BUILD_TYPE]
+Value=0
+[ACTIVE_TAB]
+Value=GC V2.c
+[USE_EEPROM]
+Value=0
+[USE_HEAP]
+Value=0
+[HEAP_SIZE]
+Value=2000
+[EEPROM_DEFINITION]
+Value=
+[FILES]
+Count=3
+File0=GC V2.c
+File1=Signaling\Signaling.c
+File2=LCD\LCD.c
+[BINARIES]
+Count=0
+[IMAGES]
+Count=0
+ActiveImageIndex=-1
+[OPENED_FILES]
+Count=3
+File0=GC V2.c
+File1=Signaling\Signaling.h
+File2=LCD\LCD.h
+[EEPROM]
+Count=0
+[ACTIVE_COMMENTS_FILES]
+Count=0
+[OTHER_FILES]
+Count=0
+[SEARCH_PATH]
+Count=13
+Path0=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\defs\
+Path1=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\
+Path2=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\
+Path3=C:\Users\baghi\Desktop\GC V2\GC V2\
+Path4=C:\Users\Kapouchima\Desktop\GC V2\
+Path5=C:\Users\baghi\Desktop\Sina\GateController\GC V2\
+Path6=C:\Users\baghi\Desktop\Sina\GateController\GC V2\Signaling\
+Path7=C:\Users\baghi\Desktop\Sina\GateController\GC V2\LCD\
+Path8=C:\Users\Kapouchima\Desktop\GC V2\Signaling\
+Path9=C:\Users\Kapouchima\Desktop\GC V2\LCD\
+Path10=C:\Users\baghi\Desktop\GC V2\GC V2\Signaling\
+Path11=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\Signaling\
+Path12=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\LCD\
+[HEADER_PATH]
+Count=7
+Path0=C:\Users\baghi\Desktop\Sina\GateController\GC V2\LCD\
+Path1=C:\Users\baghi\Desktop\Sina\GateController\GC V2\Signaling\
+Path2=C:\Users\Kapouchima\Desktop\GC V2\LCD\
+Path3=C:\Users\Kapouchima\Desktop\GC V2\Signaling\
+Path4=C:\Users\baghi\Desktop\GC V2\GC V2\Signaling\
+Path5=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\Signaling\
+Path6=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\LCD\
+[HEADERS]
+Count=2
+File0=Signaling\Signaling.h
+File1=LCD\LCD.h
+[PLDS]
+Count=0
+[Useses]
+Count=46
+File0=ADC
+File1=Button
+File2=CAN
+File3=CAN_SPI
+File4=Compact_Flash
+File5=Compact_Flash_FAT16
+File6=Conversions
+File7=C_Math
+File8=C_Stdlib
+File9=C_String
+File10=C_Type
+File11=EEPROM
+File12=EPSON_S1D13700
+File13=FLASH
+File14=Glcd
+File15=Glcd_Fonts
+File16=I2C
+File17=Keypad4x4
+File18=Lcd
+File19=Lcd_Constants
+File20=Manchester
+File21=One_Wire
+File22=Port_Expander
+File23=PrintOut
+File24=PS2
+File25=PWM
+File26=RS485
+File27=Software_I2C
+File28=Software_SPI
+File29=Software_UART
+File30=Sound
+File31=SPI
+File32=SPI_Ethernet
+File33=SPI_Ethernet_24j600
+File34=SPI_Glcd
+File35=SPI_Lcd
+File36=SPI_Lcd8
+File37=SPI_T6963C
+File38=Sprintf
+File39=Sprinti
+File40=Sprintl
+File41=T6963C
+File42=Time
+File43=TouchPanel
+File44=Trigonometry
+File45=UART
+[EXPANDED NODES]
+Node1=Sources
+Node2=Header Files
+Count=2
