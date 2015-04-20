@@ -1,24 +1,6 @@
-#line 1 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
-#line 1 "c:/users/kapouchima/desktop/gc v2/gc-v2/gc version ii/lcd/lcd.h"
-#line 29 "c:/users/kapouchima/desktop/gc v2/gc-v2/gc version ii/lcd/lcd.h"
-typedef struct
-{
- char Line1[16];
- char Line2[16];
- char LCDUpdateFlag;
- char LCDFlashFlag;
- char LCDLine;
-}LCDSystem;
-
-
-
-void LCDSystem_Task(LCDsystem *);
-void LCDSystem_FlasherEPOCH();
-void LCDSystem_Init(LCDSystem *);
-void LCDSystem_Update(LCDSystem *);
-void LCDSystem_SetFlasher(LCDSystem *,char);
-#line 1 "c:/users/kapouchima/desktop/gc v2/gc-v2/gc version ii/signaling/signaling.h"
-#line 30 "c:/users/kapouchima/desktop/gc v2/gc-v2/gc version ii/signaling/signaling.h"
+#line 1 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 1 "c:/users/baghi/desktop/gc v2/gc version ii/signaling/signaling.h"
+#line 30 "c:/users/baghi/desktop/gc v2/gc version ii/signaling/signaling.h"
 typedef struct
 {
  char SignalCode;
@@ -40,7 +22,11 @@ void SignalingSystem_ClearSignal(SignalingSystem *,char);
 void SignalingSystem_ClearAllSignals(SignalingSystem * ,char );
 void SignalingSystem_Task(SignalingSystem *);
 void SignalingSystem_Init(SignalingSystem *);
-#line 29 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
+#line 1 "c:/users/baghi/desktop/gc v2/gc version ii/keys/keys.h"
+#line 38 "c:/users/baghi/desktop/gc v2/gc version ii/keys/keys.h"
+void KeysSystem_EPOCH();
+char KeysSystem_Task();
+#line 34 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 sbit LCD_RS at RB5_bit;
 sbit LCD_EN at RB4_bit;
 sbit LCD_D7 at RB3_bit;
@@ -71,28 +57,21 @@ enum
 }DoorStatus;
 
 
-char s0[]="Invalid";
-char s1[]="Open   ";
-char s2[]="Close  ";
-char s3[]="Opening";
-char s4[]="Closing";
-char s5[]="StopedO";
-char s6[]="StopedC";
-
-
-
-
 
 char text[16];
-char Flag20ms=0,Flag500ms=0,Counterms500=0,SimStatus=0,PrevSimStatus=0,DoorActFlag=0;
-unsigned long ms500=0,SimTime=0;
+char Flag20ms=0,Flag500ms=0,Counterms500=0,SimStatus=0,PrevSimStatus=0,DoorActFlag=0,LCDBLCounter=10;
+char MenuState=0,MenuCounter=0,Keys=0,DisplayMode=0,BuzzerCounter=5,LCDFlashFlag=0,LCDFlashState=0;
+unsigned long ms500=0,SimTime=0,LCTime=0;
 
 
 char OpenningTime=10,ClosingTime=10,InvalidTime=1,AutocloseTime=20;
 
 
 SignalingSystem SigSys;
-LCDSystem LCD;
+
+
+
+char * _Blank="                ";
 
 
 
@@ -106,6 +85,14 @@ void Sim3();
 void Sim4();
 void Sim5();
 void Init();
+void charValueToStr(char, char *);
+void MenuHandler();
+void Menu1();
+void Menu2();
+void Menu3();
+void SaveConfig();
+void LoadConfig();
+void FlashLCD();
 
 
 
@@ -123,7 +110,7 @@ void Init()
  ANCON0=0;
  ANCON1=0;
 
- porta=1;
+ porta=0;
  portb=0;
  portc=0;
  portd=0;
@@ -143,8 +130,9 @@ void Init()
 
 
  LCD_Init();
- LCDSystem_Init(&LCD);
- delay_ms(100);
+
+ LCD_cmd(_LCD_CURSOR_OFF);
+ delay_ms(500);
   (porta.b6) =1;
 
 
@@ -156,8 +144,11 @@ void Init()
 
 
  DoorStatus=DOORSTATUS_Close;
+
+
+ LoadConfig();
 }
-#line 158 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
+#line 168 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void interrupt()
 {
  if((TMR0IF_bit)&&(TMR0IE_bit))
@@ -171,24 +162,40 @@ void interrupt()
  TMR0IF_bit=0;
  }
 }
-#line 183 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
+#line 193 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void main() {
 
 char dat;
 
 Init();
 
+LCD_out(1,1,"     Start!     ");
+LCD_out(2,1,"                ");
+
+
 while(1)
 {
 
  if(Flag20ms)
  {
- LCDSystem_Task(&LCD);
+ KeysSystem_EPOCH();
+
+ if(BuzzerCounter>0)
+ {BuzzerCounter=BuzzerCounter-1; }
+ else
+  (portc.b5) =0;
+
  Flag20ms=0;
  }
 
  if(Flag500ms)
  {
+ if(LCDBLCounter>0)
+ LCDBLCounter=LCDBLCounter-1;
+ else
+  (porta.b6) =0;
+ LCDFlashState=!LCDFlashState;
+ FlashLCD();
  ms500=ms500+1;
  SignalingSystem_SystemEPOCH(&SigSys);
  SignalingSystem_Task(&SigSys);
@@ -196,26 +203,218 @@ while(1)
  }
 
 
+ Keys=KeysSystem_Task();
+ if(Keys!=0) {LCDBLCounter=10;BuzzerCounter=3;}
 
-  (porte.b0) = (porta.b5) ;
+ if(DisplayMode==0)
+ MenuHandler();
+#line 252 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+ DoorSimulator();
 
- if(( (porta.b1) )&&(! (portd.b3) ))
+ if(LCDBLCounter>0) (porta.b6) =1;
+
+
+}
+}
+#line 274 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+void ShowLCTime()
+{
+ static unsigned long PrevLCTime;
+ unsigned long tm;
+ unsigned hours;
+ char minutes,seconds;
+ char txt[17];
+ tm=(ms500-LCTime)/2;
+ if(tm!=PrevLCTime)
  {
-  (portd.b3) =1;
- SignalingSystem_AddSignal(&SigSys,4,1);
- DoorActFlag=1;
+ PrevLCTime=tm;
+ seconds=(tm%60);
+ tm=tm/60;
+ minutes=(tm%60);
+ hours=tm/60;
+
+ wordtostr(hours,txt+2);
+ bytetostr(minutes,txt+8);
+ bytetostr(seconds,txt+12);
+ memcpy(txt,"LC:",3);
+ memcpy(txt+7,"H ",2);
+ memcpy(txt+11,"M ",2);
+ memcpy(txt+15,"S ",2);
+ txt[16]=0;
+
+ LCD_out(1,1,txt);
  }
 
 
- if(SignalingSystem_CheckSignal(&SigSys,1))
-  (portd.b3) =0;
 
- DoorSimulator();
-#line 255 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
-}
+
 
 }
-#line 272 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
+#line 326 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+void MenuHandler()
+{
+ switch(MenuState)
+ {
+ case 0:
+ if(Keys &  (0b001) ) MenuState=1;
+ ShowLCTime();
+ break;
+
+ case 1:
+ Menu1();
+ break;
+
+ case 2:
+ Menu2();
+ break;
+
+ case 3:
+ Menu3();
+ break;
+ }
+}
+
+
+
+
+
+
+
+
+
+
+void UpdateMenuText()
+{
+char txt[10];
+
+ memcpy(txt,"                ",10);
+ switch(MenuCounter)
+ {
+ case 0:
+ lcd_out(1,1," Openning Time  ");
+ charValueToStr(OpenningTime,txt);
+ lcd_out(2,5,txt);
+ break;
+
+ case 1:
+ lcd_out(1,1,"  Closing Time  ");
+ charValueToStr(ClosingTime,txt);
+ lcd_out(2,5,txt);
+ break;
+
+ case 2:
+ lcd_out(1,1,"  Invalid Time  ");
+ charValueToStr(InvalidTime,txt);
+ lcd_out(2,5,txt);
+ break;
+
+ case 3:
+ lcd_out(1,1,"Autoclose Time  ");
+ charValueToStr(AutocloseTime,txt);
+ lcd_out(2,5,txt);
+ break;
+
+ case 4:
+ lcd_out(1,1,"  Save Changes  ");
+ lcd_out(2,1,_Blank);
+ break;
+
+ case 5:
+ lcd_out(1,1," Discard & Exit ");
+ lcd_out(2,1,_Blank);
+ break;
+ }
+}
+#line 413 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+void Menu1()
+{
+ UpdateMenuText();
+ MenuState=2;
+}
+
+
+
+
+
+
+
+
+
+void Menu2()
+{
+ LCDFlashFlag=0;
+ if(Keys &  (0b100) )
+ if(MenuCounter>0)
+ {MenuCounter=MenuCounter-1;MenuState=1;}
+
+ if(Keys &  (0b010) )
+ if(MenuCounter<5)
+ {MenuCounter=MenuCounter+1;MenuState=1;}
+
+ if(Keys &  (0b001) )
+ MenuState=3;
+}
+
+
+
+
+
+
+
+
+void Menu3()
+{
+ LCDFlashFlag=1;
+ switch(MenuCounter)
+ {
+ case 0:
+ if(Keys &  (0b010) ) if(OpenningTime<255) {OpenningTime=OpenningTime+1;UpdateMenuText();}
+ if(Keys &  (0b100) ) if(OpenningTime>0) {OpenningTime=OpenningTime-1;UpdateMenuText();}
+ if(Keys &  (0b001) ) MenuState=1;
+ break;
+
+ case 1:
+ if(Keys &  (0b010) ) if(ClosingTime<255) {ClosingTime=ClosingTime+1;UpdateMenuText();}
+ if(Keys &  (0b100) ) if(ClosingTime>0) {ClosingTime=ClosingTime-1;UpdateMenuText();}
+ if(Keys &  (0b001) ) MenuState=1;
+ break;
+
+ case 2:
+ if(Keys &  (0b010) ) if(InvalidTime<255) {InvalidTime=InvalidTime+1;UpdateMenuText();}
+ if(Keys &  (0b100) ) if(InvalidTime>0) {InvalidTime=InvalidTime-1;UpdateMenuText();}
+ if(Keys &  (0b001) ) MenuState=1;
+ break;
+
+ case 3:
+ if(Keys &  (0b010) ) if(AutocloseTime<255) {AutocloseTime=AutocloseTime+1;UpdateMenuText();}
+ if(Keys &  (0b100) ) if(AutocloseTime>0) {AutocloseTime=AutocloseTime-1;UpdateMenuText();}
+ if(Keys &  (0b001) ) MenuState=1;
+ break;
+
+ case 4:
+ if(Keys &  (0b001) ) MenuState=0;
+ {LCDFlashFlag=0;SaveConfig();MenuState=0;}
+ break;
+
+ case 5:
+ if(Keys &  (0b001) ) MenuState=0;
+ {LCDFlashFlag=0;LoadConfig();MenuState=0;}
+ break;
+ }
+
+
+
+}
+#line 506 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+void charValueToStr(char val, char * string)
+{
+ bytetostr(val>>1,string);
+ if((val%2)==1)
+ memcpy(string+3,".5s",4);
+ else
+ memcpy(string+3,".0s",4);
+}
+#line 536 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim0()
 {
 
@@ -223,80 +422,94 @@ void Sim0()
  {
  SignalingSystem_AddSignal(&SigSys,OpenningTime,50);
  DoorStatus=DOORSTATUS_Openning;
- memcpy(LCD.Line2,"    Openning    ",16);
- LCDSystem_Update(&LCD);
+ if((DisplayMode==0) && (MenuState==0))
+ {
+ LCD_out(2,1,"    Openning    ");
+ }
  SimStatus=1;
  DoorActFlag=0;
  }
 }
-#line 299 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
+#line 565 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim1()
 {
  if(SignalingSystem_CheckSignal(&SigSys,50))
  {
  DoorStatus=DOORSTATUS_Open;
- memcpy(LCD.Line2,"     Opened     ",16);
- LCDSystem_Update(&LCD);
+ if((DisplayMode==0) && (MenuState==0))
+ {
+ LCD_out(2,1,"     Opened     ");
+ }
  SimStatus=2;
  SignalingSystem_AddSignal(&SigSys,AutocloseTime-InvalidTime,51);
  }
 }
-#line 325 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
+#line 593 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim2()
 {
  if(SignalingSystem_CheckSignal(&SigSys,51))
  {
  DoorStatus=DOORSTATUS_Invalid;
- memcpy(LCD.Line2,"    Invalid     ",16);
- LCDSystem_Update(&LCD);
+ if((DisplayMode==0) && (MenuState==0))
+ {
+ LCD_out(2,1,"    Invalid     ");
+ }
  SimStatus=3;
  SignalingSystem_AddSignal(&SigSys,InvalidTime*2,52);
  SimTime=ms500+InvalidTime;
  DoorActFlag=0;
  }
 }
-#line 360 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
+#line 630 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim3()
 {
  if(SignalingSystem_CheckSignal(&SigSys,52))
  {
  DoorStatus=DOORSTATUS_Closing;
- memcpy(LCD.Line2,"    Closing     ",16);
- LCDSystem_Update(&LCD);
+ if((DisplayMode==0) && (MenuState==0))
+ {
+ LCD_out(2,1,"    Closing     ");
+ }
  SimStatus=4;
  SignalingSystem_AddSignal(&SigSys,ClosingTime-(InvalidTime*2),53);
  }
 
- if(! (porta.b5) )
+ if(! (portc.b0) )
  {
  SignalingSystem_ClearSignal(&SigSys,53);
  SignalingSystem_ClearSignal(&SigSys,52);
  DoorStatus=DOORSTATUS_Openning;
- memcpy(LCD.Line2,"    Openning    ",16);
- LCDSystem_Update(&LCD);
+ if((DisplayMode==0) && (MenuState==0))
+ {
+ LCD_out(2,1,"    Openning    ");
+ }
  SimStatus=1;
  SignalingSystem_AddSignal(&SigSys,InvalidTime,50);
  }
 }
-#line 402 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
+#line 676 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim4()
 {
  if(SignalingSystem_CheckSignal(&SigSys,53))
  {
  DoorStatus=DOORSTATUS_Invalid;
- memcpy(LCD.Line2,"    Invalid     ",16);
- LCDSystem_Update(&LCD);
+ if((DisplayMode==0) && (MenuState==0))
+ {
+ LCD_out(2,1,"    Invalid     ");
+ }
  SimStatus=5;
  SignalingSystem_AddSignal(&SigSys,(InvalidTime*2),54);
  }
 
- if(! (porta.b5) )
+ if(! (portc.b0) )
  {
  SignalingSystem_ClearSignal(&SigSys,53);
  SignalingSystem_ClearSignal(&SigSys,54);
  DoorStatus=DOORSTATUS_Openning;
- memcpy(LCD.Line2,"    Openning    ",16);
- LCDSystem_Update(&LCD);
+ if((DisplayMode==0) && (MenuState==0))
+ {
+ LCD_out(2,1,"    Openning    ");
+ }
  SimStatus=1;
  SignalingSystem_AddSignal(&SigSys,ms500-SimTime,50);
  }
@@ -306,25 +519,29 @@ void Sim4()
  SignalingSystem_ClearSignal(&SigSys,53);
  SignalingSystem_ClearSignal(&SigSys,54);
  DoorStatus=DOORSTATUS_Openning;
- memcpy(LCD.Line2,"    Openning    ",16);
- LCDSystem_Update(&LCD);
+ if((DisplayMode==0) && (MenuState==0))
+ {
+ LCD_out(2,1,"    Openning    ");
+ }
  SimStatus=1;
  SignalingSystem_AddSignal(&SigSys,ms500-SimTime,50);
  DoorActFlag=0;
  }
 }
-#line 452 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
+#line 732 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim5()
 {
  if(SignalingSystem_CheckSignal(&SigSys,54))
  {
  DoorStatus=DOORSTATUS_Close;
- memcpy(LCD.Line2,"     Closed     ",16);
- LCDSystem_Update(&LCD);
+ if((DisplayMode==0) && (MenuState==0))
+ {
+ LCD_out(2,1,"     Closed     ");
+ }
  SimStatus=0;
  }
 }
-#line 480 "C:/Users/Kapouchima/Desktop/GC V2/GC-V2/GC Version II/GC V2.c"
+#line 762 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void DoorSimulator()
 {
  switch(SimStatus)
@@ -352,5 +569,58 @@ void DoorSimulator()
  case 5:
  Sim5();
  break;
+ }
+}
+#line 803 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+void SaveConfig()
+{
+ eeprom_write(0,OpenningTime);
+ eeprom_write(1,ClosingTime);
+ eeprom_write(2,InvalidTime);
+ eeprom_write(3,AutocloseTime);
+}
+
+
+
+
+
+
+
+
+
+void LoadConfig()
+{
+ OpenningTime=eeprom_read(0);
+ ClosingTime=eeprom_read(1);
+ InvalidTime=eeprom_read(2);
+ AutocloseTime=eeprom_read(3);
+}
+#line 838 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+void FlashLCD()
+{
+ static char PrevLCDFlashState;
+
+ if(LCDFlashFlag)
+ {
+ PrevLCDFlashState=LCDFlashFlag;
+ if(LCDFlashState)
+ {
+ LCD_chr(2,1,'>');LCD_chr(2,2,'>');LCD_chr(2,3,'>');
+ LCD_chr(2,16,'<');LCD_chr(2,15,'<');LCD_chr(2,14,'<');
+ }
+ else
+ {
+ LCD_chr(2,1,' ');LCD_chr(2,2,' ');LCD_chr(2,3,' ');
+ LCD_chr(2,16,' ');LCD_chr(2,15,' ');LCD_chr(2,14,' ');
+ }
+ }
+ else
+ {
+ if(PrevLCDFlashState)
+ {
+ LCD_chr(2,1,' ');LCD_chr(2,2,' ');LCD_chr(2,3,' ');
+ LCD_chr(2,16,' ');LCD_chr(2,15,' ');LCD_chr(2,14,' ');
+ }
+ PrevLCDFlashState=LCDFlashState;
  }
 }

@@ -1,11 +1,12 @@
-#include "LCD/LCD.h"
+//#include "LCD/LCD.h"
 #include "Signaling/Signaling.h"
+#include "Keys/Keys.h"
 
 #define Buzzer (portc.b5)
-#define Dip1 (porta.b1)
-#define Dip2 (porta.b2)
-#define Dip3 (porta.b3)
-#define Dip4 (porta.b5)
+#define Dip4 (!porta.b1)
+#define Dip3 (!porta.b2)
+#define Dip2 (!porta.b3)
+#define Dip1 (!porta.b5)
 #define LCDBL (porta.b6)
 #define sw2 (porta.b7)
 #define Relay4 (portd.b0)
@@ -14,11 +15,15 @@
 #define Relay1 (portd.b3)
 #define sw3 (portd.b4)
 #define sw1 (portd.b5)
-#define IRin Dip4
-//(portc.b0)
+#define IRin (portc.b0)
 #define RTEn1 (portc.b1)
 #define RTEn2 (portc.b2)
 #define LED (porte.b0)
+
+
+#define CENTER (0b001)
+#define UP (0b010)
+#define DOWN (0b100)
 
 
 
@@ -59,15 +64,18 @@ enum
 //Global Variables
 char text[16];
 char Flag20ms=0,Flag500ms=0,Counterms500=0,SimStatus=0,PrevSimStatus=0,DoorActFlag=0,LCDBLCounter=10;
-char MenuState=0,MenuCounter=0,Keys=0;
-unsigned long ms500=0,SimTime=0;
+char MenuState=0,MenuCounter=0,Keys=0,DisplayMode=0,BuzzerCounter=5,LCDFlashFlag=0,LCDFlashState=0;
+unsigned long ms500=0,SimTime=0,LCTime=0;
 
 //-----Configs
 char OpenningTime=10,ClosingTime=10,InvalidTime=1,AutocloseTime=20;
 
 
 SignalingSystem SigSys;
-LCDSystem LCD;
+//LCDSystem LCD;
+
+//-------Texts
+char * _Blank="                ";
 
 
 
@@ -81,8 +89,14 @@ void Sim3();
 void Sim4();
 void Sim5();
 void Init();
+void charValueToStr(char, char *);
+void MenuHandler();
+void Menu1();
+void Menu2();
+void Menu3();
 void SaveConfig();
 void LoadConfig();
+void FlashLCD();
 
 
 
@@ -120,8 +134,9 @@ void Init()
   
   //------LCD Init
   LCD_Init();
-  LCDSystem_Init(&LCD);
-  delay_ms(100);
+  //LCDSystem_Init(&LCD);
+  LCD_cmd(_LCD_CURSOR_OFF);
+  delay_ms(500);
   LCDBL=1;
   
   //-------UART
@@ -133,6 +148,9 @@ void Init()
   
   //-------Door Status
   DoorStatus=DOORSTATUS_Close;
+  
+  //-------LoadConfigs
+  LoadConfig();
 }
 
 
@@ -178,12 +196,22 @@ char dat;
 
 Init();
 
+LCD_out(1,1,"     Start!     ");
+LCD_out(2,1,"                ");
+
+
 while(1)
 {
 
   if(Flag20ms)
   {
-    LCDSystem_Task(&LCD);
+    KeysSystem_EPOCH();
+    
+    if(BuzzerCounter>0)
+      {BuzzerCounter=BuzzerCounter-1;/*Buzzer=1;*/}
+    else
+      Buzzer=0;
+    
     Flag20ms=0;
   }
   
@@ -193,31 +221,97 @@ while(1)
       LCDBLCounter=LCDBLCounter-1;
     else
       LCDBL=0;
+    LCDFlashState=!LCDFlashState;
+    FlashLCD();
     ms500=ms500+1;
     SignalingSystem_SystemEPOCH(&SigSys);
     SignalingSystem_Task(&SigSys);
     Flag500ms=0;
   }
 
-  MenuHandler();
 
-  LED=IRin;
+  Keys=KeysSystem_Task();
+  if(Keys!=0) {LCDBLCounter=10;BuzzerCounter=3;}
   
-  if((Dip1)&&(!Relay1))
+  if(DisplayMode==0)
+    MenuHandler();
+
+
+  
+  /*if((Dip1)&&(!Relay1))
   {
     Relay1=1;
     SignalingSystem_AddSignal(&SigSys,4,1);
     DoorActFlag=1;
   }
-  
-  
+
+
   if(SignalingSystem_CheckSignal(&SigSys,1))
-    Relay1=0;
+    Relay1=0;*/
     
   DoorSimulator();
+  
+  if(LCDBLCounter>0)LCDBL=1;
+
 
 }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void ShowLCTime()
+{
+  static unsigned long PrevLCTime;
+  unsigned long tm;
+  unsigned hours;
+  char minutes,seconds;
+  char txt[17];
+  tm=(ms500-LCTime)/2;
+  if(tm!=PrevLCTime)
+  {
+    PrevLCTime=tm;
+    seconds=(tm%60);
+    tm=tm/60;
+    minutes=(tm%60);
+    hours=tm/60;
+
+    wordtostr(hours,txt+2);
+    bytetostr(minutes,txt+8);
+    bytetostr(seconds,txt+12);
+    memcpy(txt,"LC:",3);
+    memcpy(txt+7,"H ",2);
+    memcpy(txt+11,"M ",2);
+    memcpy(txt+15,"S ",2);
+    txt[16]=0;
+
+    LCD_out(1,1,txt);
+  }
+  
+  
+  
+  
+  
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -231,15 +325,79 @@ while(1)
 
 void MenuHandler()
 {
-  if(MenuState==1)
-    Menu1();
+  switch(MenuState)
+  {
+    case 0:
+      if(Keys & CENTER) MenuState=1;
+      ShowLCTime();
+      break;
+
+    case 1:
+      Menu1();
+      break;
     
-  if(MenuState==2)
-    Menu2();
+    case 2:
+      Menu2();
+      break;
     
-  if(MenuState==3)
-    Menu3();
+    case 3:
+      Menu3();
+      break;
+  }
 }
+
+
+
+
+
+
+
+
+
+
+void UpdateMenuText()
+{
+char txt[10];
+
+   memcpy(txt,"                ",10);
+   switch(MenuCounter)
+   {
+     case 0:
+       lcd_out(1,1," Openning Time  ");
+       charValueToStr(OpenningTime,txt);
+       lcd_out(2,5,txt);
+       break;
+
+     case 1:
+       lcd_out(1,1,"  Closing Time  ");
+       charValueToStr(ClosingTime,txt);
+       lcd_out(2,5,txt);
+       break;
+
+     case 2:
+       lcd_out(1,1,"  Invalid Time  ");
+       charValueToStr(InvalidTime,txt);
+       lcd_out(2,5,txt);
+       break;
+
+     case 3:
+       lcd_out(1,1,"Autoclose Time  ");
+       charValueToStr(AutocloseTime,txt);
+       lcd_out(2,5,txt);
+       break;
+
+     case 4:
+       lcd_out(1,1,"  Save Changes  ");
+       lcd_out(2,1,_Blank);
+       break;
+
+     case 5:
+       lcd_out(1,1," Discard & Exit ");
+       lcd_out(2,1,_Blank);
+       break;
+   }
+}
+
 
 
 
@@ -254,38 +412,7 @@ void MenuHandler()
 
 void Menu1()
 {
-   switch(MenuCounter)
-   {
-     case 0:
-       memcpy(LCD.Line1," Openning Time  ",16);
-       LCDSystem_Update(&LCD);
-       break;
-
-     case 1:
-       memcpy(LCD.Line1,"  Closing Time  ",16);
-       LCDSystem_Update(&LCD);
-       break;
-       
-     case 2:
-       memcpy(LCD.Line1,"  Invalid Time  ",16);
-       LCDSystem_Update(&LCD);
-       break;
-       
-     case 3:
-       memcpy(LCD.Line1,"Autoclose Time  ",16);
-       LCDSystem_Update(&LCD);
-       break;
-       
-     case 4:
-       memcpy(LCD.Line1,"  Save Changes  ",16);
-       LCDSystem_Update(&LCD);
-       break;
-       
-     case 5:
-       memcpy(LCD.Line1," Discard & Exit ",16);
-       LCDSystem_Update(&LCD);
-       break;
-   }
+   UpdateMenuText();
    MenuState=2;
 }
 
@@ -299,14 +426,17 @@ void Menu1()
 
 void Menu2()
 {
-  if(Keys.b0)
+  LCDFlashFlag=0;
+  if(Keys & DOWN)
     if(MenuCounter>0)
-      MenuCounter=MenuCounter-1;
+      {MenuCounter=MenuCounter-1;MenuState=1;}
       
-  if(Keys.b2)
+  if(Keys & UP)
     if(MenuCounter<5)
-      MenuCounter=MenuCounter+1;
-  
+      {MenuCounter=MenuCounter+1;MenuState=1;}
+      
+  if(Keys & CENTER)
+    MenuState=3;
 }
 
 
@@ -318,7 +448,73 @@ void Menu2()
 
 void Menu3()
 {
+  LCDFlashFlag=1;
+  switch(MenuCounter)
+  {
+    case 0:
+      if(Keys & UP)     if(OpenningTime<255)  {OpenningTime=OpenningTime+1;UpdateMenuText();}
+      if(Keys & DOWN)   if(OpenningTime>0)    {OpenningTime=OpenningTime-1;UpdateMenuText();}
+      if(Keys & CENTER) MenuState=1;
+      break;
+      
+    case 1:
+      if(Keys & UP)     if(ClosingTime<255)  {ClosingTime=ClosingTime+1;UpdateMenuText();}
+      if(Keys & DOWN)   if(ClosingTime>0)    {ClosingTime=ClosingTime-1;UpdateMenuText();}
+      if(Keys & CENTER) MenuState=1;
+      break;
+      
+    case 2:
+      if(Keys & UP)     if(InvalidTime<255)  {InvalidTime=InvalidTime+1;UpdateMenuText();}
+      if(Keys & DOWN)   if(InvalidTime>0)    {InvalidTime=InvalidTime-1;UpdateMenuText();}
+      if(Keys & CENTER) MenuState=1;
+      break;
+      
+    case 3:
+      if(Keys & UP)     if(AutocloseTime<255)  {AutocloseTime=AutocloseTime+1;UpdateMenuText();}
+      if(Keys & DOWN)   if(AutocloseTime>0)    {AutocloseTime=AutocloseTime-1;UpdateMenuText();}
+      if(Keys & CENTER) MenuState=1;
+      break;
+      
+    case 4:
+      if(Keys & CENTER) MenuState=0;
+        {LCDFlashFlag=0;SaveConfig();MenuState=0;}
+      break;
+      
+    case 5:
+      if(Keys & CENTER) MenuState=0;
+        {LCDFlashFlag=0;LoadConfig();MenuState=0;}
+      break;
+  }
+  
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void charValueToStr(char val, char * string)
+{
+  bytetostr(val>>1,string);
+  if((val%2)==1)
+    memcpy(string+3,".5s",4);
+  else
+    memcpy(string+3,".0s",4);
+}
+
+
+
+
 
 
 
@@ -344,8 +540,10 @@ void Sim0() // Close
   {
     SignalingSystem_AddSignal(&SigSys,OpenningTime,50); // OpenTime
     DoorStatus=DOORSTATUS_Openning;
-    memcpy(LCD.Line2,"    Openning    ",16);
-    LCDSystem_Update(&LCD);
+    if((DisplayMode==0) && (MenuState==0))
+    {
+      LCD_out(2,1,"    Openning    ");
+    }
     SimStatus=1;
     DoorActFlag=0;
   }
@@ -369,8 +567,10 @@ void Sim1() // Openning
   if(SignalingSystem_CheckSignal(&SigSys,50))
   {
     DoorStatus=DOORSTATUS_Open;
-    memcpy(LCD.Line2,"     Opened     ",16);
-    LCDSystem_Update(&LCD);
+    if((DisplayMode==0) && (MenuState==0))
+    {
+      LCD_out(2,1,"     Opened     ");
+    }
     SimStatus=2;
     SignalingSystem_AddSignal(&SigSys,AutocloseTime-InvalidTime,51);//AutoClose - Invalid
   }
@@ -395,8 +595,10 @@ void Sim2() // Open
      if(SignalingSystem_CheckSignal(&SigSys,51))
      {
        DoorStatus=DOORSTATUS_Invalid;
-       memcpy(LCD.Line2,"    Invalid     ",16);
-       LCDSystem_Update(&LCD);
+       if((DisplayMode==0) && (MenuState==0))
+       {
+         LCD_out(2,1,"    Invalid     ");
+       }
        SimStatus=3;
        SignalingSystem_AddSignal(&SigSys,InvalidTime*2,52); // invalid time * 2
        SimTime=ms500+InvalidTime;
@@ -430,8 +632,10 @@ void Sim3() // Invalid 1
   if(SignalingSystem_CheckSignal(&SigSys,52))
   {
        DoorStatus=DOORSTATUS_Closing;
-       memcpy(LCD.Line2,"    Closing     ",16);
-       LCDSystem_Update(&LCD);
+       if((DisplayMode==0) && (MenuState==0))
+       {
+         LCD_out(2,1,"    Closing     ");
+       }
        SimStatus=4;
        SignalingSystem_AddSignal(&SigSys,ClosingTime-(InvalidTime*2),53); // closing time - invalid time * 2
   }
@@ -441,8 +645,10 @@ void Sim3() // Invalid 1
     SignalingSystem_ClearSignal(&SigSys,53);
     SignalingSystem_ClearSignal(&SigSys,52);
     DoorStatus=DOORSTATUS_Openning;
-    memcpy(LCD.Line2,"    Openning    ",16);
-    LCDSystem_Update(&LCD);
+    if((DisplayMode==0) && (MenuState==0))
+    {
+      LCD_out(2,1,"    Openning    ");
+    }
     SimStatus=1;
     SignalingSystem_AddSignal(&SigSys,InvalidTime,50);
   }
@@ -472,8 +678,10 @@ void Sim4() // Closing
   if(SignalingSystem_CheckSignal(&SigSys,53))
   {
        DoorStatus=DOORSTATUS_Invalid;
-       memcpy(LCD.Line2,"    Invalid     ",16);
-       LCDSystem_Update(&LCD);
+       if((DisplayMode==0) && (MenuState==0))
+       {
+         LCD_out(2,1,"    Invalid     ");
+       }
        SimStatus=5;
        SignalingSystem_AddSignal(&SigSys,(InvalidTime*2),54); // invalid time * 2
   }
@@ -483,8 +691,10 @@ void Sim4() // Closing
     SignalingSystem_ClearSignal(&SigSys,53);
     SignalingSystem_ClearSignal(&SigSys,54);
     DoorStatus=DOORSTATUS_Openning;
-    memcpy(LCD.Line2,"    Openning    ",16);
-    LCDSystem_Update(&LCD);
+    if((DisplayMode==0) && (MenuState==0))
+    {
+      LCD_out(2,1,"    Openning    ");
+    }
     SimStatus=1;
     SignalingSystem_AddSignal(&SigSys,ms500-SimTime,50);
   }
@@ -494,8 +704,10 @@ void Sim4() // Closing
     SignalingSystem_ClearSignal(&SigSys,53);
     SignalingSystem_ClearSignal(&SigSys,54);
     DoorStatus=DOORSTATUS_Openning;
-    memcpy(LCD.Line2,"    Openning    ",16);
-    LCDSystem_Update(&LCD);
+    if((DisplayMode==0) && (MenuState==0))
+    {
+      LCD_out(2,1,"    Openning    ");
+    }
     SimStatus=1;
     SignalingSystem_AddSignal(&SigSys,ms500-SimTime,50);
     DoorActFlag=0;
@@ -522,8 +734,10 @@ void Sim5() // Invalid 2
   if(SignalingSystem_CheckSignal(&SigSys,54))
      {
        DoorStatus=DOORSTATUS_Close;
-       memcpy(LCD.Line2,"     Closed     ",16);
-       LCDSystem_Update(&LCD);
+       if((DisplayMode==0) && (MenuState==0))
+       {
+         LCD_out(2,1,"     Closed     ");
+       }
        SimStatus=0;
      }
 }
@@ -610,3 +824,42 @@ void LoadConfig()
   AutocloseTime=eeprom_read(3);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+void FlashLCD()
+{
+  static char PrevLCDFlashState;
+  
+  if(LCDFlashFlag)
+  {
+    PrevLCDFlashState=LCDFlashFlag;
+    if(LCDFlashState)
+    {
+      LCD_chr(2,1,'>');LCD_chr(2,2,'>');LCD_chr(2,3,'>');
+      LCD_chr(2,16,'<');LCD_chr(2,15,'<');LCD_chr(2,14,'<');
+    }
+    else
+    {
+      LCD_chr(2,1,' ');LCD_chr(2,2,' ');LCD_chr(2,3,' ');
+      LCD_chr(2,16,' ');LCD_chr(2,15,' ');LCD_chr(2,14,' ');
+    }
+  }
+  else
+  {
+    if(PrevLCDFlashState)
+    {
+      LCD_chr(2,1,' ');LCD_chr(2,2,' ');LCD_chr(2,3,' ');
+      LCD_chr(2,16,' ');LCD_chr(2,15,' ');LCD_chr(2,14,' ');
+    }
+    PrevLCDFlashState=LCDFlashState;
+  }
+}

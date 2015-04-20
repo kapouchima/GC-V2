@@ -4,59 +4,157 @@ main
 		Lcd_Init
 			Delay_5500us
 			Delay_1us
-		LCDSystem_Init
+		Lcd_Cmd
+			Delay_1us
+			Delay_5500us
+			Delay_50us
 		UART1_Init
 		UART2_Init
 		SignalingSystem_Init
 			Mul_16x16_U
-	LCDSystem_Task
-		Lcd_Out
+		LoadConfig
+			EEPROM_Read
+	Lcd_Out
+		Lcd_Cmd
+			Delay_1us
+			Delay_5500us
+			Delay_50us
+		Lcd_Chr_CP
 			Lcd_Cmd
 				Delay_1us
 				Delay_5500us
 				Delay_50us
-			Lcd_Chr_CP
+	KeysSystem_EPOCH
+	FlashLCD
+		Lcd_Chr
+			Lcd_Cmd
+				Delay_1us
+				Delay_5500us
+				Delay_50us
+	SignalingSystem_SystemEPOCH
+	SignalingSystem_Task
+		Mul_16x16_U
+	KeysSystem_Task
+	MenuHandler
+		ShowLCTime
+			Div_32x32_U
+			WordToStr
+				Div_16x16_U
+			ByteToStr
+				Div_8x8_U
+			memcpy
+			Lcd_Out
 				Lcd_Cmd
 					Delay_1us
 					Delay_5500us
 					Delay_50us
-		memcpy
-	SignalingSystem_SystemEPOCH
-	SignalingSystem_Task
-		Mul_16x16_U
-	SignalingSystem_AddSignal
-		Mul_16x16_U
-	SignalingSystem_CheckSignal
-		Mul_16x16_U
+				Lcd_Chr_CP
+					Lcd_Cmd
+						Delay_1us
+						Delay_5500us
+						Delay_50us
+		Menu1
+			UpdateMenuText
+				__CC2DW
+				memcpy
+				Lcd_Out
+					Lcd_Cmd
+						Delay_1us
+						Delay_5500us
+						Delay_50us
+					Lcd_Chr_CP
+						Lcd_Cmd
+							Delay_1us
+							Delay_5500us
+							Delay_50us
+				charValueToStr
+					ByteToStr
+						Div_8x8_U
+					memcpy
+		Menu2
+		Menu3
+			UpdateMenuText
+				__CC2DW
+				memcpy
+				Lcd_Out
+					Lcd_Cmd
+						Delay_1us
+						Delay_5500us
+						Delay_50us
+					Lcd_Chr_CP
+						Lcd_Cmd
+							Delay_1us
+							Delay_5500us
+							Delay_50us
+				charValueToStr
+					ByteToStr
+						Div_8x8_U
+					memcpy
+			SaveConfig
+				EEPROM_Write
+			LoadConfig
+				EEPROM_Read
 	DoorSimulator
 		Sim0
 			SignalingSystem_AddSignal
 				Mul_16x16_U
 			__CC2DW
-			memcpy
-			LCDSystem_Update
+			Lcd_Out
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
+				Lcd_Chr_CP
+					Lcd_Cmd
+						Delay_1us
+						Delay_5500us
+						Delay_50us
 		Sim1
 			SignalingSystem_CheckSignal
 				Mul_16x16_U
 			__CC2DW
-			memcpy
-			LCDSystem_Update
+			Lcd_Out
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
+				Lcd_Chr_CP
+					Lcd_Cmd
+						Delay_1us
+						Delay_5500us
+						Delay_50us
 			SignalingSystem_AddSignal
 				Mul_16x16_U
 		Sim2
 			SignalingSystem_CheckSignal
 				Mul_16x16_U
 			__CC2DW
-			memcpy
-			LCDSystem_Update
+			Lcd_Out
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
+				Lcd_Chr_CP
+					Lcd_Cmd
+						Delay_1us
+						Delay_5500us
+						Delay_50us
 			SignalingSystem_AddSignal
 				Mul_16x16_U
 		Sim3
 			SignalingSystem_CheckSignal
 				Mul_16x16_U
 			__CC2DW
-			memcpy
-			LCDSystem_Update
+			Lcd_Out
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
+				Lcd_Chr_CP
+					Lcd_Cmd
+						Delay_1us
+						Delay_5500us
+						Delay_50us
 			SignalingSystem_AddSignal
 				Mul_16x16_U
 			SignalingSystem_ClearSignal
@@ -65,8 +163,16 @@ main
 			SignalingSystem_CheckSignal
 				Mul_16x16_U
 			__CC2DW
-			memcpy
-			LCDSystem_Update
+			Lcd_Out
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
+				Lcd_Chr_CP
+					Lcd_Cmd
+						Delay_1us
+						Delay_5500us
+						Delay_50us
 			SignalingSystem_AddSignal
 				Mul_16x16_U
 			SignalingSystem_ClearSignal
@@ -75,6 +181,14 @@ main
 			SignalingSystem_CheckSignal
 				Mul_16x16_U
 			__CC2DW
-			memcpy
-			LCDSystem_Update
+			Lcd_Out
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
+				Lcd_Chr_CP
+					Lcd_Cmd
+						Delay_1us
+						Delay_5500us
+						Delay_50us
 interrupt

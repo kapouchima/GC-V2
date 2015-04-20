@@ -40,6 +40,7 @@ __spi_lcd8_db7
 __spi_lcd8_enable
 __spi_lcd8_rs
 __spi_lcd8_rw
+_blank
 _can_config_all_msg
 _can_config_all_valid_msg
 _can_config_dbl_buffer_bit
@@ -1278,6 +1279,7 @@ brp5_bit
 bsel0
 bsr
 button
+buzzercounter
 byte2double
 bytetohex
 bytetostr
@@ -1499,6 +1501,7 @@ cf_write_sector
 cfgs
 cfgs_bit
 character8x7
+charvaluetostr
 chs0
 chs0_bit
 chs1
@@ -1660,6 +1663,7 @@ dc5b0
 dc5b0_bit
 dc5b1
 dc5b1_bit
+debouncingcounter
 dec2bcd
 dec2bcd16
 delay_100ms
@@ -1676,6 +1680,7 @@ delay_5ms
 delay_80us
 delay_8ms
 delay_cyc
+displaymode
 div
 div_16x16_s
 div_16x16_s_l
@@ -2809,6 +2814,7 @@ flash_erase_write_64
 flash_read
 flash_read_n_bytes
 flash_write_64
+flashlcd
 flc0
 flc0_bit
 flc1
@@ -3155,6 +3161,9 @@ jtoff_filhit1_bit
 keypad_init
 keypad_key_click
 keypad_key_press
+keys
+keyssystem_epoch
+keyssystem_task
 labs
 lata
 lata0
@@ -3229,7 +3238,6 @@ late1
 late1_bit
 late2
 late2_bit
-lcd
 lcd_chr
 lcd_chr_cp
 lcd_cmd
@@ -3248,19 +3256,19 @@ lcd_out
 lcd_out_cp
 lcd_rs
 lcd_rs_direction
+lcdblcounter
 lcdflashepochflag
 lcdflashflag
-lcdline
+lcdflashstate
 lcdsystem_flasherepoch
 lcdsystem_init
 lcdsystem_setflasher
 lcdsystem_task
 lcdsystem_update
-lcdupdateflag
+lctime
 ldexp
 ldiv
-line1
-line2
+loadconfig
 log
 log10
 longint2double
@@ -3304,6 +3312,12 @@ memcmp
 memcpy
 memmove
 memset
+menu1
+menu2
+menu3
+menucounter
+menuhandler
+menustate
 mfiofs
 mfiofs_bit
 mfiosel
@@ -3525,6 +3539,7 @@ preinc0
 preinc1
 preinc2
 prevsimstatus
+prevval
 printout
 prod
 prodh
@@ -3791,6 +3806,8 @@ rec7_bit
 refocon
 regslp
 regslp_bit
+repeatcounter
+repeatnocounter
 repu
 repu_bit
 res032
@@ -4357,8 +4374,6 @@ rxwarn
 rxwarn_bit
 s
 s_bit
-s0
-s1
 s1d13700_black
 s1d13700_box
 s1d13700_cgram_adr
@@ -4430,13 +4445,9 @@ s1d13700_write_parameter
 s1d13700_write_text
 s1d13700_write_text_adv
 s1d13700_write_text_return_pos
-s2
-s3
-s4
-s5
-s6
 sam
 sam_bit
+saveconfig
 sboren
 sboren_bit
 scs0
@@ -4475,6 +4486,7 @@ setiov3224
 setjmp
 shorttohex
 shorttostr
+showlctime
 sid0
 sid0_b0sidl_bit
 sid0_b1sidl_bit
@@ -5215,6 +5227,7 @@ sync2
 sync2_bit
 system3x5
 systemepoch
+systemstate
 t08bit
 t08bit_bit
 t0con
@@ -6207,6 +6220,7 @@ ulplvl
 ulplvl_bit
 ulpsink
 ulpsink_bit
+updatemenutext
 vcfg0
 vcfg0_bit
 vcfg1

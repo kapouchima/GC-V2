@@ -28,8 +28,8 @@
 
 typedef struct
 {
-  char Line1[16];
-  char Line2[16];
+  char Line1[17];
+  char Line2[17];
   char LCDUpdateFlag;
   char LCDFlashFlag;
   char LCDLine;

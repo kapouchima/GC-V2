@@ -8,51 +8,60 @@ Value=0
 [ACTIVE_TAB]
 Value=GC V2.c
 [USE_EEPROM]
-Value=0
+Value=1
 [USE_HEAP]
 Value=0
 [HEAP_SIZE]
 Value=2000
 [EEPROM_DEFINITION]
-Value=
+Value=Keys\Keys.h
 [FILES]
-Count=3
+Count=4
 File0=GC V2.c
 File1=Signaling\Signaling.c
 File2=LCD\LCD.c
+File3=Keys\Keys.c
 [BINARIES]
 Count=0
 [IMAGES]
 Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
-Count=3
+Count=6
 File0=GC V2.c
 File1=Signaling\Signaling.h
 File2=LCD\LCD.h
+File3=Keys\Keys.c
+File4=Keys\Keys.h
+File5=..\..\Sina\GateController\GC V2\LCD\LCD.c
 [EEPROM]
-Count=0
+Count=1
+File0=GC V2.ihex
 [ACTIVE_COMMENTS_FILES]
 Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Count=13
+Count=17
 Path0=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\defs\
 Path1=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\
-Path2=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\
-Path3=C:\Users\baghi\Desktop\GC V2\GC V2\
-Path4=C:\Users\Kapouchima\Desktop\GC V2\
-Path5=C:\Users\baghi\Desktop\Sina\GateController\GC V2\
-Path6=C:\Users\baghi\Desktop\Sina\GateController\GC V2\Signaling\
-Path7=C:\Users\baghi\Desktop\Sina\GateController\GC V2\LCD\
-Path8=C:\Users\Kapouchima\Desktop\GC V2\Signaling\
-Path9=C:\Users\Kapouchima\Desktop\GC V2\LCD\
-Path10=C:\Users\baghi\Desktop\GC V2\GC V2\Signaling\
-Path11=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\Signaling\
-Path12=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\LCD\
+Path2=C:\Users\baghi\Desktop\GC V2\GC Version II\
+Path3=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\
+Path4=C:\Users\baghi\Desktop\GC V2\GC V2\
+Path5=C:\Users\Kapouchima\Desktop\GC V2\
+Path6=C:\Users\baghi\Desktop\Sina\GateController\GC V2\
+Path7=C:\Users\baghi\Desktop\Sina\GateController\GC V2\Signaling\
+Path8=C:\Users\baghi\Desktop\Sina\GateController\GC V2\LCD\
+Path9=C:\Users\Kapouchima\Desktop\GC V2\Signaling\
+Path10=C:\Users\Kapouchima\Desktop\GC V2\LCD\
+Path11=C:\Users\baghi\Desktop\GC V2\GC V2\Signaling\
+Path12=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\Signaling\
+Path13=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\LCD\
+Path14=C:\Users\baghi\Desktop\GC V2\GC Version II\Signaling\
+Path15=C:\Users\baghi\Desktop\GC V2\GC Version II\LCD\
+Path16=C:\Users\baghi\Desktop\GC V2\GC Version II\Keys\
 [HEADER_PATH]
-Count=7
+Count=10
 Path0=C:\Users\baghi\Desktop\Sina\GateController\GC V2\LCD\
 Path1=C:\Users\baghi\Desktop\Sina\GateController\GC V2\Signaling\
 Path2=C:\Users\Kapouchima\Desktop\GC V2\LCD\
@@ -60,10 +69,14 @@ Path3=C:\Users\Kapouchima\Desktop\GC V2\Signaling\
 Path4=C:\Users\baghi\Desktop\GC V2\GC V2\Signaling\
 Path5=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\Signaling\
 Path6=C:\Users\Kapouchima\Desktop\GC V2\GC-V2\GC Version II\LCD\
+Path7=C:\Users\baghi\Desktop\GC V2\GC Version II\Signaling\
+Path8=C:\Users\baghi\Desktop\GC V2\GC Version II\LCD\
+Path9=C:\Users\baghi\Desktop\GC V2\GC Version II\Keys\
 [HEADERS]
-Count=2
+Count=3
 File0=Signaling\Signaling.h
 File1=LCD\LCD.h
+File2=Keys\Keys.h
 [PLDS]
 Count=0
 [Useses]
@@ -117,4 +130,5 @@ File45=UART
 [EXPANDED NODES]
 Node1=Sources
 Node2=Header Files
-Count=2
+Node3=EEPROM Files
+Count=3
