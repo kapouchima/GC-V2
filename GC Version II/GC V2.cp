@@ -150,6 +150,7 @@ void Init()
  RC1IF_bit=0;
  RC1IE_bit=1;
  RC1IP_bit=1;
+ PEIE_bit=1;
  UART_Set_Active(&UART1_Read, &UART1_Write, &UART1_Data_Ready, &UART1_Tx_Idle);
 
 
@@ -164,7 +165,7 @@ void Init()
 
  RS485Slave_Init(NetworkAddress);
 }
-#line 184 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 185 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void interrupt()
 {
  if((TMR0IF_bit)&&(TMR0IE_bit))
@@ -183,7 +184,7 @@ void interrupt()
  RS485Slave_Receive(NetBuffer);
  }
 }
-#line 214 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 215 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void main() {
 
 char dat;
@@ -225,11 +226,11 @@ while(1)
 
 
  Keys=KeysSystem_Task();
- if(Keys!=0) {LCDBLCounter=10;BuzzerCounter=3;}
-
+ if(Keys!=0) {LCDBLCounter=20;BuzzerCounter=3;}
+#line 266 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
  if(DisplayMode==0)
  MenuHandler();
-#line 273 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 282 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
  DoorSimulator();
 
  NetworkTask();
@@ -239,7 +240,7 @@ while(1)
 
 }
 }
-#line 297 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 306 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void ShowLCTime()
 {
  static unsigned long PrevLCTime;
@@ -273,13 +274,13 @@ void ShowLCTime()
 
 
 }
-#line 349 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 358 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void MenuHandler()
 {
  switch(MenuState)
  {
  case 0:
- if(Keys &  (0b001) ) MenuState=1;
+ if(Keys &  (0b001) ) {MenuState=1;MenuCounter=0;}
  ShowLCTime();
  break;
 
@@ -311,6 +312,7 @@ void UpdateMenuText()
 char txt[10];
 
  memcpy(txt,"                ",10);
+ LCD_cmd(_LCD_CLEAR);
  switch(MenuCounter)
  {
  case 0:
@@ -338,7 +340,7 @@ char txt[10];
  break;
 
  case 4:
- lcd_out(1,1,"5 Net Address  ");
+ lcd_out(1,1,"5 Net Address   ");
  byteToStr(NetworkAddress,txt);
  lcd_out(2,5,txt);
  break;
@@ -354,7 +356,7 @@ char txt[10];
  break;
  }
 }
-#line 442 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 452 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Menu1()
 {
  UpdateMenuText();
@@ -371,14 +373,26 @@ void Menu1()
 
 void Menu2()
 {
+
+
  LCDFlashFlag=0;
  if(Keys &  (0b100) )
+ {
  if(MenuCounter>0)
- {MenuCounter=MenuCounter-1;MenuState=1;}
+ MenuCounter=MenuCounter-1;
+ else
+ MenuCounter= 6 ;
+ MenuState=1;
+ }
 
  if(Keys &  (0b010) )
- if(MenuCounter<5)
- {MenuCounter=MenuCounter+1;MenuState=1;}
+ {
+ if(MenuCounter< 6 )
+ MenuCounter=MenuCounter+1;
+ else
+ MenuCounter=0;
+ MenuState=1;
+ }
 
  if(Keys &  (0b001) )
  MenuState=3;
@@ -440,7 +454,7 @@ void Menu3()
 
 
 }
-#line 541 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 563 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void charValueToStr(char val, char * string)
 {
  bytetostr(val>>1,string);
@@ -449,7 +463,7 @@ void charValueToStr(char val, char * string)
  else
  memcpy(string+3,".0s",4);
 }
-#line 571 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 593 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim0()
 {
 
@@ -465,7 +479,7 @@ void Sim0()
  DoorActFlag=0;
  }
 }
-#line 600 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 622 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim1()
 {
  if(SignalingSystem_CheckSignal(&SigSys,50))
@@ -479,7 +493,7 @@ void Sim1()
  SignalingSystem_AddSignal(&SigSys,AutocloseTime-InvalidTime,51);
  }
 }
-#line 628 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 650 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim2()
 {
  if(SignalingSystem_CheckSignal(&SigSys,51))
@@ -495,7 +509,7 @@ void Sim2()
  DoorActFlag=0;
  }
 }
-#line 665 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 687 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim3()
 {
  if(SignalingSystem_CheckSignal(&SigSys,52))
@@ -522,7 +536,7 @@ void Sim3()
  SignalingSystem_AddSignal(&SigSys,InvalidTime,50);
  }
 }
-#line 711 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 733 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim4()
 {
  if(SignalingSystem_CheckSignal(&SigSys,53))
@@ -563,7 +577,7 @@ void Sim4()
  DoorActFlag=0;
  }
 }
-#line 767 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 789 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void Sim5()
 {
  if(SignalingSystem_CheckSignal(&SigSys,54))
@@ -576,7 +590,7 @@ void Sim5()
  SimStatus=0;
  }
 }
-#line 797 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 819 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void DoorSimulator()
 {
  switch(SimStatus)
@@ -606,7 +620,7 @@ void DoorSimulator()
  break;
  }
 }
-#line 838 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 860 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void SaveConfig()
 {
  eeprom_write(0,OpenningTime);
@@ -633,7 +647,7 @@ void LoadConfig()
  AutocloseTime=eeprom_read(3);
  NetworkAddress=eeprom_read(4);
 }
-#line 876 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
+#line 898 "C:/Users/baghi/Desktop/GC V2/GC Version II/GC V2.c"
 void FlashLCD()
 {
  static char PrevLCDFlashState;
@@ -679,18 +693,15 @@ void NetworkTask()
  LCTime=ms500;
  OpenCommand=1;
  NetBuffer[0]=200;
- NetBuffer[1]=200;
- NetBuffer[2]=200;
  Delay_ms(1);
- RS485Slave_Send(NetBuffer,3);
+ RS485Slave_Send(NetBuffer,1);
+  (porte.b0) =1;
  break;
 
  case 2:
  NetBuffer[0]=200;
- NetBuffer[1]=200;
- NetBuffer[2]=200;
  Delay_ms(1);
- RS485Slave_Send(NetBuffer,3);
+ RS485Slave_Send(NetBuffer,1);
  break;
  }
  }

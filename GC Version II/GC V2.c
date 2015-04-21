@@ -18,6 +18,7 @@
 #define RTEn1 (portc.b1)
 #define RTEn2 (portc.b2)
 #define LED (porte.b0)
+#define MenuLevel 6
 
 
 #define CENTER (0b001)
@@ -153,6 +154,7 @@ void Init()
   RC1IF_bit=0;
   RC1IE_bit=1;
   RC1IP_bit=1;
+  PEIE_bit=1;
   UART_Set_Active(&UART1_Read, &UART1_Write, &UART1_Data_Ready, &UART1_Tx_Idle);
   
   //-------Signaling System
@@ -251,7 +253,15 @@ while(1)
 
 
   Keys=KeysSystem_Task();
-  if(Keys!=0) {LCDBLCounter=10;BuzzerCounter=3;}
+  if(Keys!=0) {LCDBLCounter=20;BuzzerCounter=3;}
+  
+  /*if(Keys & UP)
+  {
+    uart2_write(0x96);uart2_write(0x00);uart2_write(0x81);uart2_write(0x01);uart2_write(0x7F);uart2_write(0xA9);
+    //NetBuffer[0]=1;
+    //RS485Master_Send(NetBuffer,1,0);
+  }*/
+  
   
   if(DisplayMode==0)
     MenuHandler();
@@ -350,7 +360,7 @@ void MenuHandler()
   switch(MenuState)
   {
     case 0:
-      if(Keys & CENTER) MenuState=1;
+      if(Keys & CENTER) {MenuState=1;MenuCounter=0;}
       ShowLCTime();
       break;
 
@@ -382,6 +392,7 @@ void UpdateMenuText()
 char txt[10];
 
    memcpy(txt,"                ",10);
+   LCD_cmd(_LCD_CLEAR);
    switch(MenuCounter)
    {
      case 0:
@@ -409,7 +420,7 @@ char txt[10];
        break;
        
      case 4:
-       lcd_out(1,1,"5 Net Address  ");
+       lcd_out(1,1,"5 Net Address   ");
        byteToStr(NetworkAddress,txt);
        lcd_out(2,5,txt);
        break;
@@ -454,14 +465,26 @@ void Menu1()
 
 void Menu2()
 {
+
+  
   LCDFlashFlag=0;
   if(Keys & DOWN)
+  {
     if(MenuCounter>0)
-      {MenuCounter=MenuCounter-1;MenuState=1;}
-      
+      MenuCounter=MenuCounter-1;
+    else
+      MenuCounter=MenuLevel;
+    MenuState=1;
+  }
+  
   if(Keys & UP)
-    if(MenuCounter<5)
-      {MenuCounter=MenuCounter+1;MenuState=1;}
+  {
+    if(MenuCounter<MenuLevel)
+      MenuCounter=MenuCounter+1;
+    else
+      MenuCounter=0;
+    MenuState=1;
+  }
       
   if(Keys & CENTER)
     MenuState=3;
@@ -917,18 +940,15 @@ void NetworkTask()
           LCTime=ms500;
           OpenCommand=1;
           NetBuffer[0]=200;
-          NetBuffer[1]=200;
-          NetBuffer[2]=200;
           Delay_ms(1);
-          RS485Slave_Send(NetBuffer,3);
+          RS485Slave_Send(NetBuffer,1);
+          LED=1;
           break;
           
         case 2:
           NetBuffer[0]=200;
-          NetBuffer[1]=200;
-          NetBuffer[2]=200;
           Delay_ms(1);
-          RS485Slave_Send(NetBuffer,3);
+          RS485Slave_Send(NetBuffer,1);
           break;
       }
     }

@@ -27,12 +27,11 @@ Count=0
 Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
-Count=5
+Count=4
 File0=GC V2.c
 File1=Signaling\Signaling.h
-File2=LCD\LCD.h
-File3=Keys\Keys.c
-File4=Keys\Keys.h
+File2=Keys\Keys.c
+File3=Keys\Keys.h
 [EEPROM]
 Count=1
 File0=GC V2.ihex

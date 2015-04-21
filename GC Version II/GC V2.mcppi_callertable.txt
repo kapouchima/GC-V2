@@ -59,6 +59,10 @@ main
 			UpdateMenuText
 				__CC2DW
 				memcpy
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
 				Lcd_Out
 					Lcd_Cmd
 						Delay_1us
@@ -80,6 +84,10 @@ main
 			UpdateMenuText
 				__CC2DW
 				memcpy
+				Lcd_Cmd
+					Delay_1us
+					Delay_5500us
+					Delay_50us
 				Lcd_Out
 					Lcd_Cmd
 						Delay_1us
