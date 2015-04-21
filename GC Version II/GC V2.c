@@ -7,13 +7,10 @@
 #define Dip2 (!porta.b3)
 #define Dip1 (!porta.b5)
 #define LCDBL (porta.b6)
-#define sw2 (porta.b7)
 #define Relay4 (portd.b0)
 #define Relay3 (portd.b1)
 #define Relay2 (portd.b2)
 #define Relay1 (portd.b3)
-#define sw3 (portd.b4)
-#define sw1 (portd.b5)
 #define IRin (portc.b0)
 #define RTEn1 (portc.b1)
 #define RTEn2 (portc.b2)
@@ -24,6 +21,9 @@
 #define CENTER (0b001)
 #define UP (0b010)
 #define DOWN (0b100)
+
+#define DoorOpenTime 60
+#define DoorActionDelay 6
 
 
 
@@ -70,7 +70,7 @@ enum
 
 //Global Variables
 char text[16];
-char Flag20ms=0,Flag500ms=0,Counterms500=0,SimStatus=0,PrevSimStatus=0,DoorActFlag=0,LCDBLCounter=10;
+char Flag20ms=0,Flag500ms=0,Counterms500=0,SimStatus=0,PrevSimStatus=0,DoorActFlag=0,LCDBLCounter=10,ActionTaken=0;
 char MenuState=0,MenuCounter=0,Keys=0,DisplayMode=0,BuzzerCounter=5,LCDFlashFlag=0,LCDFlashState=0,OpenCommand=0;
 char NetBuffer[10];
 unsigned long ms500=0,SimTime=0,LCTime=0;
@@ -106,6 +106,9 @@ void SaveConfig();
 void LoadConfig();
 void FlashLCD();
 void NetworkTask();
+void DoorManager();
+void OpenWhenClosed();
+void OpenWhenClosing();
 
 
 
@@ -280,8 +283,8 @@ while(1)
     Relay1=0;*/
     
   DoorSimulator();
-  
   NetworkTask();
+  DoorManager();
   
   if(LCDBLCounter>0)LCDBL=1;
 }
@@ -937,6 +940,8 @@ void NetworkTask()
         case 1:
           LCTime=ms500;
           OpenCommand=1;
+          SignalingSystem_ClearSignal(&SigSys,1);
+          SignalingSystem_AddSignal(&SigSys,DoorOpenTime,1);
           NetBuffer[0]=200;
           Delay_ms(1);
           RS485Slave_Send(NetBuffer,1);
@@ -951,4 +956,131 @@ void NetworkTask()
       }
     }
 
+}
+
+
+
+
+
+
+
+
+
+
+void DoorManager()
+{
+  //------------------------Command List
+  //- Start/Open on   4
+  //- Start/Open off  5
+  //- Stop on         6
+  //- Stop off        7
+  //- Close on        8
+  //- Close off       9
+  
+  if(SignalingSystem_CheckSignal(&SigSys,4))
+    Relay1=1;
+  
+  if(SignalingSystem_CheckSignal(&SigSys,5))
+    Relay1=0;
+    
+  if(SignalingSystem_CheckSignal(&SigSys,6))
+    Relay2=1;
+    
+  if(SignalingSystem_CheckSignal(&SigSys,7))
+    Relay2=0;
+
+  if(SignalingSystem_CheckSignal(&SigSys,8))
+    Relay3=1;
+    
+  if(SignalingSystem_CheckSignal(&SigSys,9))
+    Relay3=0;
+    
+    
+  
+  if(SignalingSystem_CheckSignal(&SigSys,1))
+    OpenCommand=0;
+    
+  if(SignalingSystem_CheckSignal(&SigSys,2))
+    ActionTaken=0;
+    
+  
+  
+  
+  
+  if((DoorStatus==DOORSTATUS_Close) && (OpenCommand) && (!ActionTaken))
+  {
+    OpenWhenClosed();
+    ActionTaken=1;
+    SignalingSystem_AddSignal(&SigSys,DoorActionDelay,2);
+  }
+  
+  if((DoorStatus==DOORSTATUS_Closing) && (OpenCommand) && (!ActionTaken))
+  {
+    OpenWhenClosing();
+    ActionTaken=1;
+    SignalingSystem_AddSignal(&SigSys,DoorActionDelay,2);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void OpenWhenClosed()
+{
+  //------------------------Command List
+  //- Start/Open on   4
+  //- Start/Open off  5
+  //- Stop on         6
+  //- Stop off        7
+  //- Close on        8
+  //- Close off       9
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void OpenWhenClosing()
+{
+  //------------------------Command List
+  //- Start/Open on   4
+  //- Start/Open off  5
+  //- Stop on         6
+  //- Stop off        7
+  //- Close on        8
+  //- Close off       9
 }
