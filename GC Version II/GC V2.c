@@ -1,4 +1,3 @@
-//#include "LCD/LCD.h"
 #include "Signaling/Signaling.h"
 #include "Keys/Keys.h"
 
@@ -48,6 +47,13 @@ sbit LCD_D4_Direction at TRISB0_bit;
 
 
 
+// RS485 module pinout
+sbit RS485_rxtx_pin at RC1_bit;  // transmit/receive control set to PORTC.B1
+
+// Pin direction
+sbit RS485_rxtx_pin_direction at TRISC1_bit;   // RxTx pin direction set as output
+
+
 
 enum
 {
@@ -64,11 +70,12 @@ enum
 //Global Variables
 char text[16];
 char Flag20ms=0,Flag500ms=0,Counterms500=0,SimStatus=0,PrevSimStatus=0,DoorActFlag=0,LCDBLCounter=10;
-char MenuState=0,MenuCounter=0,Keys=0,DisplayMode=0,BuzzerCounter=5,LCDFlashFlag=0,LCDFlashState=0;
+char MenuState=0,MenuCounter=0,Keys=0,DisplayMode=0,BuzzerCounter=5,LCDFlashFlag=0,LCDFlashState=0,OpenCommand=0;
+char NetBuffer[10];
 unsigned long ms500=0,SimTime=0,LCTime=0;
 
 //-----Configs
-char OpenningTime=10,ClosingTime=10,InvalidTime=1,AutocloseTime=20;
+char OpenningTime=10,ClosingTime=10,InvalidTime=1,AutocloseTime=20,NetworkAddress=0;
 
 
 SignalingSystem SigSys;
@@ -97,6 +104,7 @@ void Menu3();
 void SaveConfig();
 void LoadConfig();
 void FlashLCD();
+void NetworkTask();
 
 
 
@@ -142,6 +150,10 @@ void Init()
   //-------UART
   UART1_Init(9600);
   UART2_Init(9600);
+  RC1IF_bit=0;
+  RC1IE_bit=1;
+  RC1IP_bit=1;
+  UART_Set_Active(&UART1_Read, &UART1_Write, &UART1_Data_Ready, &UART1_Tx_Idle);
   
   //-------Signaling System
   SignalingSystem_Init(&SigSys);
@@ -151,6 +163,9 @@ void Init()
   
   //-------LoadConfigs
   LoadConfig();
+  
+  //-------RS485
+  RS485Slave_Init(NetworkAddress);
 }
 
 
@@ -176,6 +191,11 @@ void interrupt()
     TMR0H=0x63;
     TMR0L=0xBF;
     TMR0IF_bit=0;
+  }
+  
+  if((RC1IE_bit)&&(RC1IF_bit))
+  {
+    RS485Slave_Receive(NetBuffer);
   }
 }
 
@@ -250,6 +270,8 @@ while(1)
     Relay1=0;*/
     
   DoorSimulator();
+  
+  NetworkTask();
   
   if(LCDBLCounter>0)LCDBL=1;
 
@@ -363,36 +385,42 @@ char txt[10];
    switch(MenuCounter)
    {
      case 0:
-       lcd_out(1,1," Openning Time  ");
+       lcd_out(1,1,"1 Openning Time ");
        charValueToStr(OpenningTime,txt);
        lcd_out(2,5,txt);
        break;
 
      case 1:
-       lcd_out(1,1,"  Closing Time  ");
+       lcd_out(1,1,"2 Closing Time  ");
        charValueToStr(ClosingTime,txt);
        lcd_out(2,5,txt);
        break;
 
      case 2:
-       lcd_out(1,1,"  Invalid Time  ");
+       lcd_out(1,1,"3 Invalid Time  ");
        charValueToStr(InvalidTime,txt);
        lcd_out(2,5,txt);
        break;
 
      case 3:
-       lcd_out(1,1,"Autoclose Time  ");
+       lcd_out(1,1,"4 Autoclose Time");
        charValueToStr(AutocloseTime,txt);
        lcd_out(2,5,txt);
        break;
-
+       
      case 4:
-       lcd_out(1,1,"  Save Changes  ");
-       lcd_out(2,1,_Blank);
+       lcd_out(1,1,"5 Net Address  ");
+       byteToStr(NetworkAddress,txt);
+       lcd_out(2,5,txt);
        break;
 
      case 5:
-       lcd_out(1,1," Discard & Exit ");
+       lcd_out(1,1,"6 Save Changes  ");
+       lcd_out(2,1,_Blank);
+       break;
+
+     case 6:
+       lcd_out(1,1,"7 Discard & Exit");
        lcd_out(2,1,_Blank);
        break;
    }
@@ -476,11 +504,17 @@ void Menu3()
       break;
       
     case 4:
+      if(Keys & UP)     if(NetworkAddress<255)  {NetworkAddress=NetworkAddress+1;UpdateMenuText();}
+      if(Keys & DOWN)   if(NetworkAddress>0)    {NetworkAddress=NetworkAddress-1;UpdateMenuText();}
+      if(Keys & CENTER) MenuState=1;
+      break;
+      
+    case 5:
       if(Keys & CENTER) MenuState=0;
         {LCDFlashFlag=0;SaveConfig();MenuState=0;}
       break;
       
-    case 5:
+    case 6:
       if(Keys & CENTER) MenuState=0;
         {LCDFlashFlag=0;LoadConfig();MenuState=0;}
       break;
@@ -806,6 +840,8 @@ void SaveConfig()
   eeprom_write(1,ClosingTime);
   eeprom_write(2,InvalidTime);
   eeprom_write(3,AutocloseTime);
+  eeprom_write(4,NetworkAddress);
+  RS485Slave_Init(NetworkAddress);
 }
 
 
@@ -822,6 +858,7 @@ void LoadConfig()
   ClosingTime=eeprom_read(1);
   InvalidTime=eeprom_read(2);
   AutocloseTime=eeprom_read(3);
+  NetworkAddress=eeprom_read(4);
 }
 
 
@@ -862,4 +899,38 @@ void FlashLCD()
     }
     PrevLCDFlashState=LCDFlashState;
   }
+}
+
+
+
+
+
+
+
+void NetworkTask()
+{
+  if (NetBuffer[4]) {                    // upon completed valid message receive
+      NetBuffer[4] = 0;                    //   data[4] is set to 0xFF
+      switch(NetBuffer[0])
+      {
+        case 1:
+          LCTime=ms500;
+          OpenCommand=1;
+          NetBuffer[0]=200;
+          NetBuffer[1]=200;
+          NetBuffer[2]=200;
+          Delay_ms(1);
+          RS485Slave_Send(NetBuffer,3);
+          break;
+          
+        case 2:
+          NetBuffer[0]=200;
+          NetBuffer[1]=200;
+          NetBuffer[2]=200;
+          Delay_ms(1);
+          RS485Slave_Send(NetBuffer,3);
+          break;
+      }
+    }
+
 }

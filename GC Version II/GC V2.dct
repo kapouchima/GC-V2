@@ -3353,6 +3353,9 @@ mul_32x32_u
 mul_8x8_s
 n
 n_bit
+netbuffer
+networkaddress
+networktask
 not_a
 not_a_bit
 not_address
@@ -3403,6 +3406,7 @@ oerr1
 oerr1_bit
 oerr2
 oerr2_bit
+opencommand
 openningtime
 opmode0
 opmode0_bit
@@ -3827,6 +3831,8 @@ rosel
 rosel_bit
 rosslp
 rosslp_bit
+rs485_rxtx_pin
+rs485_rxtx_pin_direction
 rs485master_init
 rs485master_receive
 rs485master_send

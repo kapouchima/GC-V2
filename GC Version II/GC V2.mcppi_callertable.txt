@@ -10,10 +10,12 @@ main
 			Delay_50us
 		UART1_Init
 		UART2_Init
+		UART_Set_Active
 		SignalingSystem_Init
 			Mul_16x16_U
 		LoadConfig
 			EEPROM_Read
+		RS485Slave_Init
 	Lcd_Out
 		Lcd_Cmd
 			Delay_1us
@@ -71,6 +73,8 @@ main
 					ByteToStr
 						Div_8x8_U
 					memcpy
+				ByteToStr
+					Div_8x8_U
 		Menu2
 		Menu3
 			UpdateMenuText
@@ -90,8 +94,11 @@ main
 					ByteToStr
 						Div_8x8_U
 					memcpy
+				ByteToStr
+					Div_8x8_U
 			SaveConfig
 				EEPROM_Write
+				RS485Slave_Init
 			LoadConfig
 				EEPROM_Read
 	DoorSimulator
@@ -191,4 +198,9 @@ main
 						Delay_1us
 						Delay_5500us
 						Delay_50us
+	NetworkTask
+		RS485Slave_Send
+			____DoIFC
 interrupt
+	RS485Slave_Receive
+		____DoIFC
