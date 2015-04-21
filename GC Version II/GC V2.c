@@ -284,8 +284,6 @@ while(1)
   NetworkTask();
   
   if(LCDBLCounter>0)LCDBL=1;
-
-
 }
 }
 
@@ -534,7 +532,7 @@ void Menu3()
       
     case 5:
       if(Keys & CENTER) MenuState=0;
-        {LCDFlashFlag=0;SaveConfig();MenuState=0;}
+        {LCDFlashFlag=0;SaveConfig();MenuState=0;BuzzerCounter=20;}
       break;
       
     case 6:
