@@ -207,8 +207,19 @@ main
 						Delay_5500us
 						Delay_50us
 	NetworkTask
+		SignalingSystem_ClearSignal
+			Mul_16x16_U
+		SignalingSystem_AddSignal
+			Mul_16x16_U
 		RS485Slave_Send
 			____DoIFC
+	DoorManager
+		SignalingSystem_CheckSignal
+			Mul_16x16_U
+		OpenWhenClosed
+		SignalingSystem_AddSignal
+			Mul_16x16_U
+		OpenWhenClosing
 interrupt
 	RS485Slave_Receive
 		____DoIFC

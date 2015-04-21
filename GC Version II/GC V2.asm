@@ -1,61 +1,61 @@
 
 _Init:
 
-;GC V2.c,117 :: 		void Init()
-;GC V2.c,120 :: 		OSCCON=0b01100000;
+;GC V2.c,120 :: 		void Init()
+;GC V2.c,123 :: 		OSCCON=0b01100000;
 	MOVLW       96
 	MOVWF       OSCCON+0 
-;GC V2.c,121 :: 		OSCTUNE.PLLEN=1;
+;GC V2.c,124 :: 		OSCTUNE.PLLEN=1;
 	BSF         OSCTUNE+0, 6 
-;GC V2.c,123 :: 		ANCON0=0;
+;GC V2.c,126 :: 		ANCON0=0;
 	CLRF        ANCON0+0 
-;GC V2.c,124 :: 		ANCON1=0;
+;GC V2.c,127 :: 		ANCON1=0;
 	CLRF        ANCON1+0 
-;GC V2.c,126 :: 		porta=0;
+;GC V2.c,129 :: 		porta=0;
 	CLRF        PORTA+0 
-;GC V2.c,127 :: 		portb=0;
+;GC V2.c,130 :: 		portb=0;
 	CLRF        PORTB+0 
-;GC V2.c,128 :: 		portc=0;
+;GC V2.c,131 :: 		portc=0;
 	CLRF        PORTC+0 
-;GC V2.c,129 :: 		portd=0;
+;GC V2.c,132 :: 		portd=0;
 	CLRF        PORTD+0 
-;GC V2.c,130 :: 		porte=0;
+;GC V2.c,133 :: 		porte=0;
 	CLRF        PORTE+0 
-;GC V2.c,131 :: 		trisa=0b10111111;
+;GC V2.c,134 :: 		trisa=0b10111111;
 	MOVLW       191
 	MOVWF       TRISA+0 
-;GC V2.c,132 :: 		trisb=0b11000000;
+;GC V2.c,135 :: 		trisb=0b11000000;
 	MOVLW       192
 	MOVWF       TRISB+0 
-;GC V2.c,133 :: 		trisc=0b10000001;
+;GC V2.c,136 :: 		trisc=0b10000001;
 	MOVLW       129
 	MOVWF       TRISC+0 
-;GC V2.c,134 :: 		trisd=0b10110000;
+;GC V2.c,137 :: 		trisd=0b10110000;
 	MOVLW       176
 	MOVWF       TRISD+0 
-;GC V2.c,135 :: 		trise=0b1110;
+;GC V2.c,138 :: 		trise=0b1110;
 	MOVLW       14
 	MOVWF       TRISE+0 
-;GC V2.c,138 :: 		T0CON=0b10000001; //prescaler 4
+;GC V2.c,141 :: 		T0CON=0b10000001; //prescaler 4
 	MOVLW       129
 	MOVWF       T0CON+0 
-;GC V2.c,139 :: 		TMR0H=0x63;
+;GC V2.c,142 :: 		TMR0H=0x63;
 	MOVLW       99
 	MOVWF       TMR0H+0 
-;GC V2.c,140 :: 		TMR0L=0xBF;
+;GC V2.c,143 :: 		TMR0L=0xBF;
 	MOVLW       191
 	MOVWF       TMR0L+0 
-;GC V2.c,141 :: 		INTCON.b7=1;
+;GC V2.c,144 :: 		INTCON.b7=1;
 	BSF         INTCON+0, 7 
-;GC V2.c,142 :: 		INTCON.T0IE=1;
+;GC V2.c,145 :: 		INTCON.T0IE=1;
 	BSF         INTCON+0, 5 
-;GC V2.c,145 :: 		LCD_Init();
+;GC V2.c,148 :: 		LCD_Init();
 	CALL        _Lcd_Init+0, 0
-;GC V2.c,147 :: 		LCD_cmd(_LCD_CURSOR_OFF);
+;GC V2.c,150 :: 		LCD_cmd(_LCD_CURSOR_OFF);
 	MOVLW       12
 	MOVWF       FARG_Lcd_Cmd_out_char+0 
 	CALL        _Lcd_Cmd+0, 0
-;GC V2.c,148 :: 		delay_ms(500);
+;GC V2.c,151 :: 		delay_ms(500);
 	MOVLW       21
 	MOVWF       R11, 0
 	MOVLW       75
@@ -70,27 +70,27 @@ L_Init0:
 	DECFSZ      R11, 1, 0
 	BRA         L_Init0
 	NOP
-;GC V2.c,149 :: 		LCDBL=1;
+;GC V2.c,152 :: 		LCDBL=1;
 	BSF         PORTA+0, 6 
-;GC V2.c,152 :: 		UART1_Init(9600);
+;GC V2.c,155 :: 		UART1_Init(9600);
 	MOVLW       207
 	MOVWF       SPBRG+0 
 	BSF         TXSTA+0, 2, 0
 	CALL        _UART1_Init+0, 0
-;GC V2.c,153 :: 		UART2_Init(9600);
+;GC V2.c,156 :: 		UART2_Init(9600);
 	MOVLW       207
 	MOVWF       SPBRG2+0 
 	BSF         TXSTA2+0, 2, 0
 	CALL        _UART2_Init+0, 0
-;GC V2.c,154 :: 		RC1IF_bit=0;
+;GC V2.c,157 :: 		RC1IF_bit=0;
 	BCF         RC1IF_bit+0, 5 
-;GC V2.c,155 :: 		RC1IE_bit=1;
+;GC V2.c,158 :: 		RC1IE_bit=1;
 	BSF         RC1IE_bit+0, 5 
-;GC V2.c,156 :: 		RC1IP_bit=1;
+;GC V2.c,159 :: 		RC1IP_bit=1;
 	BSF         RC1IP_bit+0, 5 
-;GC V2.c,157 :: 		PEIE_bit=1;
+;GC V2.c,160 :: 		PEIE_bit=1;
 	BSF         PEIE_bit+0, 6 
-;GC V2.c,158 :: 		UART_Set_Active(&UART1_Read, &UART1_Write, &UART1_Data_Ready, &UART1_Tx_Idle);
+;GC V2.c,161 :: 		UART_Set_Active(&UART1_Read, &UART1_Write, &UART1_Data_Ready, &UART1_Tx_Idle);
 	MOVLW       _UART1_Read+0
 	MOVWF       FARG_UART_Set_Active_read_ptr+0 
 	MOVLW       hi_addr(_UART1_Read+0)
@@ -124,84 +124,84 @@ L_Init0:
 	MOVLW       0
 	MOVWF       FARG_UART_Set_Active_tx_idle_ptr+3 
 	CALL        _UART_Set_Active+0, 0
-;GC V2.c,161 :: 		SignalingSystem_Init(&SigSys);
+;GC V2.c,164 :: 		SignalingSystem_Init(&SigSys);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_Init+0 
 	MOVLW       hi_addr(_SigSys+0)
 	MOVWF       FARG_SignalingSystem_Init+1 
 	CALL        _SignalingSystem_Init+0, 0
-;GC V2.c,164 :: 		DoorStatus=DOORSTATUS_Close;
+;GC V2.c,167 :: 		DoorStatus=DOORSTATUS_Close;
 	MOVLW       2
 	MOVWF       _DoorStatus+0 
-;GC V2.c,167 :: 		LoadConfig();
+;GC V2.c,170 :: 		LoadConfig();
 	CALL        _LoadConfig+0, 0
-;GC V2.c,170 :: 		RS485Slave_Init(NetworkAddress);
+;GC V2.c,173 :: 		RS485Slave_Init(NetworkAddress);
 	MOVF        _NetworkAddress+0, 0 
 	MOVWF       FARG_RS485Slave_Init_slave_address+0 
 	CALL        _RS485Slave_Init+0, 0
-;GC V2.c,171 :: 		}
+;GC V2.c,174 :: 		}
 	RETURN      0
 ; end of _Init
 
 _interrupt:
 
-;GC V2.c,185 :: 		void interrupt()
-;GC V2.c,187 :: 		if((TMR0IF_bit)&&(TMR0IE_bit))
+;GC V2.c,188 :: 		void interrupt()
+;GC V2.c,190 :: 		if((TMR0IF_bit)&&(TMR0IE_bit))
 	BTFSS       TMR0IF_bit+0, 2 
 	GOTO        L_interrupt3
 	BTFSS       TMR0IE_bit+0, 5 
 	GOTO        L_interrupt3
-L__interrupt138:
-;GC V2.c,189 :: 		Flag20ms=1;
+L__interrupt152:
+;GC V2.c,192 :: 		Flag20ms=1;
 	MOVLW       1
 	MOVWF       _Flag20ms+0 
-;GC V2.c,190 :: 		Counterms500=Counterms500+1;
+;GC V2.c,193 :: 		Counterms500=Counterms500+1;
 	INCF        _Counterms500+0, 1 
-;GC V2.c,191 :: 		if(Counterms500>=25)
+;GC V2.c,194 :: 		if(Counterms500>=25)
 	MOVLW       25
 	SUBWF       _Counterms500+0, 0 
 	BTFSS       STATUS+0, 0 
 	GOTO        L_interrupt4
-;GC V2.c,192 :: 		{Flag500ms=1;Counterms500=0;}
+;GC V2.c,195 :: 		{Flag500ms=1;Counterms500=0;}
 	MOVLW       1
 	MOVWF       _Flag500ms+0 
 	CLRF        _Counterms500+0 
 L_interrupt4:
-;GC V2.c,193 :: 		TMR0H=0x63;
+;GC V2.c,196 :: 		TMR0H=0x63;
 	MOVLW       99
 	MOVWF       TMR0H+0 
-;GC V2.c,194 :: 		TMR0L=0xBF;
+;GC V2.c,197 :: 		TMR0L=0xBF;
 	MOVLW       191
 	MOVWF       TMR0L+0 
-;GC V2.c,195 :: 		TMR0IF_bit=0;
+;GC V2.c,198 :: 		TMR0IF_bit=0;
 	BCF         TMR0IF_bit+0, 2 
-;GC V2.c,196 :: 		}
+;GC V2.c,199 :: 		}
 L_interrupt3:
-;GC V2.c,198 :: 		if((RC1IE_bit)&&(RC1IF_bit))
+;GC V2.c,201 :: 		if((RC1IE_bit)&&(RC1IF_bit))
 	BTFSS       RC1IE_bit+0, 5 
 	GOTO        L_interrupt7
 	BTFSS       RC1IF_bit+0, 5 
 	GOTO        L_interrupt7
-L__interrupt137:
-;GC V2.c,200 :: 		RS485Slave_Receive(NetBuffer);
+L__interrupt151:
+;GC V2.c,203 :: 		RS485Slave_Receive(NetBuffer);
 	MOVLW       _NetBuffer+0
 	MOVWF       FARG_RS485Slave_Receive_data_buffer+0 
 	MOVLW       hi_addr(_NetBuffer+0)
 	MOVWF       FARG_RS485Slave_Receive_data_buffer+1 
 	CALL        _RS485Slave_Receive+0, 0
-;GC V2.c,201 :: 		}
+;GC V2.c,204 :: 		}
 L_interrupt7:
-;GC V2.c,202 :: 		}
-L__interrupt148:
+;GC V2.c,205 :: 		}
+L__interrupt164:
 	RETFIE      1
 ; end of _interrupt
 
 _main:
 
-;GC V2.c,215 :: 		void main() {
-;GC V2.c,219 :: 		Init();
+;GC V2.c,218 :: 		void main() {
+;GC V2.c,222 :: 		Init();
 	CALL        _Init+0, 0
-;GC V2.c,221 :: 		LCD_out(1,1,"     Start!     ");
+;GC V2.c,224 :: 		LCD_out(1,1,"     Start!     ");
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -226,7 +226,7 @@ _main:
 	MOVLW       hi_addr(?lstr2_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,222 :: 		LCD_out(2,1,"                ");
+;GC V2.c,225 :: 		LCD_out(2,1,"                ");
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -251,82 +251,82 @@ _main:
 	MOVLW       hi_addr(?lstr3_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,225 :: 		while(1)
+;GC V2.c,228 :: 		while(1)
 L_main8:
-;GC V2.c,228 :: 		if(Flag20ms)
+;GC V2.c,231 :: 		if(Flag20ms)
 	MOVF        _Flag20ms+0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_main10
-;GC V2.c,230 :: 		KeysSystem_EPOCH();
+;GC V2.c,233 :: 		KeysSystem_EPOCH();
 	CALL        _KeysSystem_EPOCH+0, 0
-;GC V2.c,232 :: 		if(BuzzerCounter>0)
+;GC V2.c,235 :: 		if(BuzzerCounter>0)
 	MOVF        _BuzzerCounter+0, 0 
 	SUBLW       0
 	BTFSC       STATUS+0, 0 
 	GOTO        L_main11
-;GC V2.c,233 :: 		{BuzzerCounter=BuzzerCounter-1;/*Buzzer=1;*/}
+;GC V2.c,236 :: 		{BuzzerCounter=BuzzerCounter-1;/*Buzzer=1;*/}
 	DECF        _BuzzerCounter+0, 1 
 	GOTO        L_main12
 L_main11:
-;GC V2.c,235 :: 		Buzzer=0;
+;GC V2.c,238 :: 		Buzzer=0;
 	BCF         PORTC+0, 5 
 L_main12:
-;GC V2.c,237 :: 		Flag20ms=0;
+;GC V2.c,240 :: 		Flag20ms=0;
 	CLRF        _Flag20ms+0 
-;GC V2.c,238 :: 		}
+;GC V2.c,241 :: 		}
 L_main10:
-;GC V2.c,240 :: 		if(Flag500ms)
+;GC V2.c,243 :: 		if(Flag500ms)
 	MOVF        _Flag500ms+0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_main13
-;GC V2.c,242 :: 		if(LCDBLCounter>0)
+;GC V2.c,245 :: 		if(LCDBLCounter>0)
 	MOVF        _LCDBLCounter+0, 0 
 	SUBLW       0
 	BTFSC       STATUS+0, 0 
 	GOTO        L_main14
-;GC V2.c,243 :: 		LCDBLCounter=LCDBLCounter-1;
+;GC V2.c,246 :: 		LCDBLCounter=LCDBLCounter-1;
 	DECF        _LCDBLCounter+0, 1 
 	GOTO        L_main15
 L_main14:
-;GC V2.c,245 :: 		LCDBL=0;
+;GC V2.c,248 :: 		LCDBL=0;
 	BCF         PORTA+0, 6 
 L_main15:
-;GC V2.c,246 :: 		LCDFlashState=!LCDFlashState;
+;GC V2.c,249 :: 		LCDFlashState=!LCDFlashState;
 	MOVF        _LCDFlashState+0, 1 
 	MOVLW       1
 	BTFSS       STATUS+0, 2 
 	MOVLW       0
 	MOVWF       _LCDFlashState+0 
-;GC V2.c,247 :: 		FlashLCD();
+;GC V2.c,250 :: 		FlashLCD();
 	CALL        _FlashLCD+0, 0
-;GC V2.c,248 :: 		ms500=ms500+1;
+;GC V2.c,251 :: 		ms500=ms500+1;
 	MOVLW       1
 	ADDWF       _ms500+0, 1 
 	MOVLW       0
 	ADDWFC      _ms500+1, 1 
 	ADDWFC      _ms500+2, 1 
 	ADDWFC      _ms500+3, 1 
-;GC V2.c,249 :: 		SignalingSystem_SystemEPOCH(&SigSys);
+;GC V2.c,252 :: 		SignalingSystem_SystemEPOCH(&SigSys);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_SystemEPOCH+0 
 	MOVLW       hi_addr(_SigSys+0)
 	MOVWF       FARG_SignalingSystem_SystemEPOCH+1 
 	CALL        _SignalingSystem_SystemEPOCH+0, 0
-;GC V2.c,250 :: 		SignalingSystem_Task(&SigSys);
+;GC V2.c,253 :: 		SignalingSystem_Task(&SigSys);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_Task+0 
 	MOVLW       hi_addr(_SigSys+0)
 	MOVWF       FARG_SignalingSystem_Task+1 
 	CALL        _SignalingSystem_Task+0, 0
-;GC V2.c,251 :: 		Flag500ms=0;
+;GC V2.c,254 :: 		Flag500ms=0;
 	CLRF        _Flag500ms+0 
-;GC V2.c,252 :: 		}
+;GC V2.c,255 :: 		}
 L_main13:
-;GC V2.c,255 :: 		Keys=KeysSystem_Task();
+;GC V2.c,258 :: 		Keys=KeysSystem_Task();
 	CALL        _KeysSystem_Task+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Keys+0 
-;GC V2.c,256 :: 		if(Keys!=0) {LCDBLCounter=20;BuzzerCounter=3;}
+;GC V2.c,259 :: 		if(Keys!=0) {LCDBLCounter=20;BuzzerCounter=3;}
 	MOVF        R0, 0 
 	XORLW       0
 	BTFSC       STATUS+0, 2 
@@ -336,35 +336,37 @@ L_main13:
 	MOVLW       3
 	MOVWF       _BuzzerCounter+0 
 L_main16:
-;GC V2.c,266 :: 		if(DisplayMode==0)
+;GC V2.c,269 :: 		if(DisplayMode==0)
 	MOVF        _DisplayMode+0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main17
-;GC V2.c,267 :: 		MenuHandler();
+;GC V2.c,270 :: 		MenuHandler();
 	CALL        _MenuHandler+0, 0
 L_main17:
-;GC V2.c,282 :: 		DoorSimulator();
+;GC V2.c,285 :: 		DoorSimulator();
 	CALL        _DoorSimulator+0, 0
-;GC V2.c,284 :: 		NetworkTask();
+;GC V2.c,286 :: 		NetworkTask();
 	CALL        _NetworkTask+0, 0
-;GC V2.c,286 :: 		if(LCDBLCounter>0)LCDBL=1;
+;GC V2.c,287 :: 		DoorManager();
+	CALL        _DoorManager+0, 0
+;GC V2.c,289 :: 		if(LCDBLCounter>0)LCDBL=1;
 	MOVF        _LCDBLCounter+0, 0 
 	SUBLW       0
 	BTFSC       STATUS+0, 0 
 	GOTO        L_main18
 	BSF         PORTA+0, 6 
 L_main18:
-;GC V2.c,287 :: 		}
+;GC V2.c,290 :: 		}
 	GOTO        L_main8
-;GC V2.c,288 :: 		}
+;GC V2.c,291 :: 		}
 	GOTO        $+0
 ; end of _main
 
 _ShowLCTime:
 
-;GC V2.c,304 :: 		void ShowLCTime()
-;GC V2.c,311 :: 		tm=(ms500-LCTime)/2;
+;GC V2.c,307 :: 		void ShowLCTime()
+;GC V2.c,314 :: 		tm=(ms500-LCTime)/2;
 	MOVF        _ms500+0, 0 
 	MOVWF       R5 
 	MOVF        _ms500+1, 0 
@@ -402,25 +404,25 @@ _ShowLCTime:
 	MOVWF       ShowLCTime_tm_L0+2 
 	MOVF        R4, 0 
 	MOVWF       ShowLCTime_tm_L0+3 
-;GC V2.c,312 :: 		if(tm!=PrevLCTime)
+;GC V2.c,315 :: 		if(tm!=PrevLCTime)
 	MOVF        R4, 0 
 	XORWF       ShowLCTime_PrevLCTime_L0+3, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ShowLCTime149
+	GOTO        L__ShowLCTime165
 	MOVF        R3, 0 
 	XORWF       ShowLCTime_PrevLCTime_L0+2, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ShowLCTime149
+	GOTO        L__ShowLCTime165
 	MOVF        R2, 0 
 	XORWF       ShowLCTime_PrevLCTime_L0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ShowLCTime149
+	GOTO        L__ShowLCTime165
 	MOVF        R1, 0 
 	XORWF       ShowLCTime_PrevLCTime_L0+0, 0 
-L__ShowLCTime149:
+L__ShowLCTime165:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_ShowLCTime19
-;GC V2.c,314 :: 		PrevLCTime=tm;
+;GC V2.c,317 :: 		PrevLCTime=tm;
 	MOVF        ShowLCTime_tm_L0+0, 0 
 	MOVWF       ShowLCTime_PrevLCTime_L0+0 
 	MOVF        ShowLCTime_tm_L0+1, 0 
@@ -429,7 +431,7 @@ L__ShowLCTime149:
 	MOVWF       ShowLCTime_PrevLCTime_L0+2 
 	MOVF        ShowLCTime_tm_L0+3, 0 
 	MOVWF       ShowLCTime_PrevLCTime_L0+3 
-;GC V2.c,315 :: 		seconds=(tm%60);
+;GC V2.c,318 :: 		seconds=(tm%60);
 	MOVLW       60
 	MOVWF       R4 
 	MOVLW       0
@@ -455,7 +457,7 @@ L__ShowLCTime149:
 	MOVWF       R3 
 	MOVF        R0, 0 
 	MOVWF       ShowLCTime_seconds_L0+0 
-;GC V2.c,316 :: 		tm=tm/60;
+;GC V2.c,319 :: 		tm=tm/60;
 	MOVLW       60
 	MOVWF       R4 
 	MOVLW       0
@@ -479,7 +481,7 @@ L__ShowLCTime149:
 	MOVWF       ShowLCTime_tm_L0+2 
 	MOVF        R3, 0 
 	MOVWF       ShowLCTime_tm_L0+3 
-;GC V2.c,317 :: 		minutes=(tm%60);
+;GC V2.c,320 :: 		minutes=(tm%60);
 	MOVLW       60
 	MOVWF       R4 
 	MOVLW       0
@@ -497,7 +499,7 @@ L__ShowLCTime149:
 	MOVWF       R3 
 	MOVF        R0, 0 
 	MOVWF       ShowLCTime_minutes_L0+0 
-;GC V2.c,318 :: 		hours=tm/60;
+;GC V2.c,321 :: 		hours=tm/60;
 	MOVLW       60
 	MOVWF       R4 
 	MOVLW       0
@@ -513,7 +515,7 @@ L__ShowLCTime149:
 	MOVF        ShowLCTime_tm_L0+3, 0 
 	MOVWF       R3 
 	CALL        _Div_32x32_U+0, 0
-;GC V2.c,320 :: 		wordtostr(hours,txt+2);
+;GC V2.c,323 :: 		wordtostr(hours,txt+2);
 	MOVF        R0, 0 
 	MOVWF       FARG_WordToStr_input+0 
 	MOVF        R1, 0 
@@ -523,7 +525,7 @@ L__ShowLCTime149:
 	MOVLW       hi_addr(ShowLCTime_txt_L0+2)
 	MOVWF       FARG_WordToStr_output+1 
 	CALL        _WordToStr+0, 0
-;GC V2.c,321 :: 		bytetostr(minutes,txt+8);
+;GC V2.c,324 :: 		bytetostr(minutes,txt+8);
 	MOVF        ShowLCTime_minutes_L0+0, 0 
 	MOVWF       FARG_ByteToStr_input+0 
 	MOVLW       ShowLCTime_txt_L0+8
@@ -531,7 +533,7 @@ L__ShowLCTime149:
 	MOVLW       hi_addr(ShowLCTime_txt_L0+8)
 	MOVWF       FARG_ByteToStr_output+1 
 	CALL        _ByteToStr+0, 0
-;GC V2.c,322 :: 		bytetostr(seconds,txt+12);
+;GC V2.c,325 :: 		bytetostr(seconds,txt+12);
 	MOVF        ShowLCTime_seconds_L0+0, 0 
 	MOVWF       FARG_ByteToStr_input+0 
 	MOVLW       ShowLCTime_txt_L0+12
@@ -539,7 +541,7 @@ L__ShowLCTime149:
 	MOVLW       hi_addr(ShowLCTime_txt_L0+12)
 	MOVWF       FARG_ByteToStr_output+1 
 	CALL        _ByteToStr+0, 0
-;GC V2.c,323 :: 		memcpy(txt,"LC:",3);
+;GC V2.c,326 :: 		memcpy(txt,"LC:",3);
 	MOVLW       ShowLCTime_txt_L0+0
 	MOVWF       FARG_memcpy_d1+0 
 	MOVLW       hi_addr(ShowLCTime_txt_L0+0)
@@ -560,7 +562,7 @@ L__ShowLCTime149:
 	MOVLW       0
 	MOVWF       FARG_memcpy_n+1 
 	CALL        _memcpy+0, 0
-;GC V2.c,324 :: 		memcpy(txt+7,"H ",2);
+;GC V2.c,327 :: 		memcpy(txt+7,"H ",2);
 	MOVLW       ShowLCTime_txt_L0+7
 	MOVWF       FARG_memcpy_d1+0 
 	MOVLW       hi_addr(ShowLCTime_txt_L0+7)
@@ -579,7 +581,7 @@ L__ShowLCTime149:
 	MOVLW       0
 	MOVWF       FARG_memcpy_n+1 
 	CALL        _memcpy+0, 0
-;GC V2.c,325 :: 		memcpy(txt+11,"M ",2);
+;GC V2.c,328 :: 		memcpy(txt+11,"M ",2);
 	MOVLW       ShowLCTime_txt_L0+11
 	MOVWF       FARG_memcpy_d1+0 
 	MOVLW       hi_addr(ShowLCTime_txt_L0+11)
@@ -598,7 +600,7 @@ L__ShowLCTime149:
 	MOVLW       0
 	MOVWF       FARG_memcpy_n+1 
 	CALL        _memcpy+0, 0
-;GC V2.c,326 :: 		memcpy(txt+15,"S ",2);
+;GC V2.c,329 :: 		memcpy(txt+15,"S ",2);
 	MOVLW       ShowLCTime_txt_L0+15
 	MOVWF       FARG_memcpy_d1+0 
 	MOVLW       hi_addr(ShowLCTime_txt_L0+15)
@@ -617,9 +619,9 @@ L__ShowLCTime149:
 	MOVLW       0
 	MOVWF       FARG_memcpy_n+1 
 	CALL        _memcpy+0, 0
-;GC V2.c,327 :: 		txt[16]=0;
+;GC V2.c,330 :: 		txt[16]=0;
 	CLRF        ShowLCTime_txt_L0+16 
-;GC V2.c,329 :: 		LCD_out(1,1,txt);
+;GC V2.c,332 :: 		LCD_out(1,1,txt);
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -629,49 +631,49 @@ L__ShowLCTime149:
 	MOVLW       hi_addr(ShowLCTime_txt_L0+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,330 :: 		}
+;GC V2.c,333 :: 		}
 L_ShowLCTime19:
-;GC V2.c,336 :: 		}
+;GC V2.c,339 :: 		}
 	RETURN      0
 ; end of _ShowLCTime
 
 _MenuHandler:
 
-;GC V2.c,356 :: 		void MenuHandler()
-;GC V2.c,358 :: 		switch(MenuState)
+;GC V2.c,359 :: 		void MenuHandler()
+;GC V2.c,361 :: 		switch(MenuState)
 	GOTO        L_MenuHandler20
-;GC V2.c,360 :: 		case 0:
+;GC V2.c,363 :: 		case 0:
 L_MenuHandler22:
-;GC V2.c,361 :: 		if(Keys & CENTER) {MenuState=1;MenuCounter=0;}
+;GC V2.c,364 :: 		if(Keys & CENTER) {MenuState=1;MenuCounter=0;}
 	BTFSS       _Keys+0, 0 
 	GOTO        L_MenuHandler23
 	MOVLW       1
 	MOVWF       _MenuState+0 
 	CLRF        _MenuCounter+0 
 L_MenuHandler23:
-;GC V2.c,362 :: 		ShowLCTime();
+;GC V2.c,365 :: 		ShowLCTime();
 	CALL        _ShowLCTime+0, 0
-;GC V2.c,363 :: 		break;
+;GC V2.c,366 :: 		break;
 	GOTO        L_MenuHandler21
-;GC V2.c,365 :: 		case 1:
+;GC V2.c,368 :: 		case 1:
 L_MenuHandler24:
-;GC V2.c,366 :: 		Menu1();
+;GC V2.c,369 :: 		Menu1();
 	CALL        _Menu1+0, 0
-;GC V2.c,367 :: 		break;
+;GC V2.c,370 :: 		break;
 	GOTO        L_MenuHandler21
-;GC V2.c,369 :: 		case 2:
+;GC V2.c,372 :: 		case 2:
 L_MenuHandler25:
-;GC V2.c,370 :: 		Menu2();
+;GC V2.c,373 :: 		Menu2();
 	CALL        _Menu2+0, 0
-;GC V2.c,371 :: 		break;
+;GC V2.c,374 :: 		break;
 	GOTO        L_MenuHandler21
-;GC V2.c,373 :: 		case 3:
+;GC V2.c,376 :: 		case 3:
 L_MenuHandler26:
-;GC V2.c,374 :: 		Menu3();
+;GC V2.c,377 :: 		Menu3();
 	CALL        _Menu3+0, 0
-;GC V2.c,375 :: 		break;
+;GC V2.c,378 :: 		break;
 	GOTO        L_MenuHandler21
-;GC V2.c,376 :: 		}
+;GC V2.c,379 :: 		}
 L_MenuHandler20:
 	MOVF        _MenuState+0, 0 
 	XORLW       0
@@ -690,14 +692,14 @@ L_MenuHandler20:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_MenuHandler26
 L_MenuHandler21:
-;GC V2.c,377 :: 		}
+;GC V2.c,380 :: 		}
 	RETURN      0
 ; end of _MenuHandler
 
 _UpdateMenuText:
 
-;GC V2.c,388 :: 		void UpdateMenuText()
-;GC V2.c,392 :: 		memcpy(txt,"                ",10);
+;GC V2.c,391 :: 		void UpdateMenuText()
+;GC V2.c,395 :: 		memcpy(txt,"                ",10);
 	MOVLW       UpdateMenuText_txt_L0+0
 	MOVWF       FARG_memcpy_d1+0 
 	MOVLW       hi_addr(UpdateMenuText_txt_L0+0)
@@ -726,15 +728,15 @@ _UpdateMenuText:
 	MOVLW       0
 	MOVWF       FARG_memcpy_n+1 
 	CALL        _memcpy+0, 0
-;GC V2.c,393 :: 		LCD_cmd(_LCD_CLEAR);
+;GC V2.c,396 :: 		LCD_cmd(_LCD_CLEAR);
 	MOVLW       1
 	MOVWF       FARG_Lcd_Cmd_out_char+0 
 	CALL        _Lcd_Cmd+0, 0
-;GC V2.c,394 :: 		switch(MenuCounter)
+;GC V2.c,397 :: 		switch(MenuCounter)
 	GOTO        L_UpdateMenuText27
-;GC V2.c,396 :: 		case 0:
+;GC V2.c,399 :: 		case 0:
 L_UpdateMenuText29:
-;GC V2.c,397 :: 		lcd_out(1,1,"1 Openning Time ");
+;GC V2.c,400 :: 		lcd_out(1,1,"1 Openning Time ");
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -759,7 +761,7 @@ L_UpdateMenuText29:
 	MOVLW       hi_addr(?lstr9_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,398 :: 		charValueToStr(OpenningTime,txt);
+;GC V2.c,401 :: 		charValueToStr(OpenningTime,txt);
 	MOVF        _OpenningTime+0, 0 
 	MOVWF       FARG_charValueToStr+0 
 	MOVLW       UpdateMenuText_txt_L0+0
@@ -767,7 +769,7 @@ L_UpdateMenuText29:
 	MOVLW       hi_addr(UpdateMenuText_txt_L0+0)
 	MOVWF       FARG_charValueToStr+1 
 	CALL        _charValueToStr+0, 0
-;GC V2.c,399 :: 		lcd_out(2,5,txt);
+;GC V2.c,402 :: 		lcd_out(2,5,txt);
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       5
@@ -777,11 +779,11 @@ L_UpdateMenuText29:
 	MOVLW       hi_addr(UpdateMenuText_txt_L0+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,400 :: 		break;
+;GC V2.c,403 :: 		break;
 	GOTO        L_UpdateMenuText28
-;GC V2.c,402 :: 		case 1:
+;GC V2.c,405 :: 		case 1:
 L_UpdateMenuText30:
-;GC V2.c,403 :: 		lcd_out(1,1,"2 Closing Time  ");
+;GC V2.c,406 :: 		lcd_out(1,1,"2 Closing Time  ");
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -806,7 +808,7 @@ L_UpdateMenuText30:
 	MOVLW       hi_addr(?lstr10_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,404 :: 		charValueToStr(ClosingTime,txt);
+;GC V2.c,407 :: 		charValueToStr(ClosingTime,txt);
 	MOVF        _ClosingTime+0, 0 
 	MOVWF       FARG_charValueToStr+0 
 	MOVLW       UpdateMenuText_txt_L0+0
@@ -814,7 +816,7 @@ L_UpdateMenuText30:
 	MOVLW       hi_addr(UpdateMenuText_txt_L0+0)
 	MOVWF       FARG_charValueToStr+1 
 	CALL        _charValueToStr+0, 0
-;GC V2.c,405 :: 		lcd_out(2,5,txt);
+;GC V2.c,408 :: 		lcd_out(2,5,txt);
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       5
@@ -824,11 +826,11 @@ L_UpdateMenuText30:
 	MOVLW       hi_addr(UpdateMenuText_txt_L0+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,406 :: 		break;
+;GC V2.c,409 :: 		break;
 	GOTO        L_UpdateMenuText28
-;GC V2.c,408 :: 		case 2:
+;GC V2.c,411 :: 		case 2:
 L_UpdateMenuText31:
-;GC V2.c,409 :: 		lcd_out(1,1,"3 Invalid Time  ");
+;GC V2.c,412 :: 		lcd_out(1,1,"3 Invalid Time  ");
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -853,7 +855,7 @@ L_UpdateMenuText31:
 	MOVLW       hi_addr(?lstr11_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,410 :: 		charValueToStr(InvalidTime,txt);
+;GC V2.c,413 :: 		charValueToStr(InvalidTime,txt);
 	MOVF        _InvalidTime+0, 0 
 	MOVWF       FARG_charValueToStr+0 
 	MOVLW       UpdateMenuText_txt_L0+0
@@ -861,7 +863,7 @@ L_UpdateMenuText31:
 	MOVLW       hi_addr(UpdateMenuText_txt_L0+0)
 	MOVWF       FARG_charValueToStr+1 
 	CALL        _charValueToStr+0, 0
-;GC V2.c,411 :: 		lcd_out(2,5,txt);
+;GC V2.c,414 :: 		lcd_out(2,5,txt);
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       5
@@ -871,11 +873,11 @@ L_UpdateMenuText31:
 	MOVLW       hi_addr(UpdateMenuText_txt_L0+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,412 :: 		break;
+;GC V2.c,415 :: 		break;
 	GOTO        L_UpdateMenuText28
-;GC V2.c,414 :: 		case 3:
+;GC V2.c,417 :: 		case 3:
 L_UpdateMenuText32:
-;GC V2.c,415 :: 		lcd_out(1,1,"4 Autoclose Time");
+;GC V2.c,418 :: 		lcd_out(1,1,"4 Autoclose Time");
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -900,7 +902,7 @@ L_UpdateMenuText32:
 	MOVLW       hi_addr(?lstr12_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,416 :: 		charValueToStr(AutocloseTime,txt);
+;GC V2.c,419 :: 		charValueToStr(AutocloseTime,txt);
 	MOVF        _AutocloseTime+0, 0 
 	MOVWF       FARG_charValueToStr+0 
 	MOVLW       UpdateMenuText_txt_L0+0
@@ -908,7 +910,7 @@ L_UpdateMenuText32:
 	MOVLW       hi_addr(UpdateMenuText_txt_L0+0)
 	MOVWF       FARG_charValueToStr+1 
 	CALL        _charValueToStr+0, 0
-;GC V2.c,417 :: 		lcd_out(2,5,txt);
+;GC V2.c,420 :: 		lcd_out(2,5,txt);
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       5
@@ -918,11 +920,11 @@ L_UpdateMenuText32:
 	MOVLW       hi_addr(UpdateMenuText_txt_L0+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,418 :: 		break;
+;GC V2.c,421 :: 		break;
 	GOTO        L_UpdateMenuText28
-;GC V2.c,420 :: 		case 4:
+;GC V2.c,423 :: 		case 4:
 L_UpdateMenuText33:
-;GC V2.c,421 :: 		lcd_out(1,1,"5 Net Address   ");
+;GC V2.c,424 :: 		lcd_out(1,1,"5 Net Address   ");
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -947,7 +949,7 @@ L_UpdateMenuText33:
 	MOVLW       hi_addr(?lstr13_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,422 :: 		byteToStr(NetworkAddress,txt);
+;GC V2.c,425 :: 		byteToStr(NetworkAddress,txt);
 	MOVF        _NetworkAddress+0, 0 
 	MOVWF       FARG_ByteToStr_input+0 
 	MOVLW       UpdateMenuText_txt_L0+0
@@ -955,7 +957,7 @@ L_UpdateMenuText33:
 	MOVLW       hi_addr(UpdateMenuText_txt_L0+0)
 	MOVWF       FARG_ByteToStr_output+1 
 	CALL        _ByteToStr+0, 0
-;GC V2.c,423 :: 		lcd_out(2,5,txt);
+;GC V2.c,426 :: 		lcd_out(2,5,txt);
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       5
@@ -965,11 +967,11 @@ L_UpdateMenuText33:
 	MOVLW       hi_addr(UpdateMenuText_txt_L0+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,424 :: 		break;
+;GC V2.c,427 :: 		break;
 	GOTO        L_UpdateMenuText28
-;GC V2.c,426 :: 		case 5:
+;GC V2.c,429 :: 		case 5:
 L_UpdateMenuText34:
-;GC V2.c,427 :: 		lcd_out(1,1,"6 Save Changes  ");
+;GC V2.c,430 :: 		lcd_out(1,1,"6 Save Changes  ");
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -994,7 +996,7 @@ L_UpdateMenuText34:
 	MOVLW       hi_addr(?lstr14_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,428 :: 		lcd_out(2,1,_Blank);
+;GC V2.c,431 :: 		lcd_out(2,1,_Blank);
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1004,11 +1006,11 @@ L_UpdateMenuText34:
 	MOVF        __Blank+1, 0 
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,429 :: 		break;
+;GC V2.c,432 :: 		break;
 	GOTO        L_UpdateMenuText28
-;GC V2.c,431 :: 		case 6:
+;GC V2.c,434 :: 		case 6:
 L_UpdateMenuText35:
-;GC V2.c,432 :: 		lcd_out(1,1,"7 Discard & Exit");
+;GC V2.c,435 :: 		lcd_out(1,1,"7 Discard & Exit");
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1033,7 +1035,7 @@ L_UpdateMenuText35:
 	MOVLW       hi_addr(?lstr15_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,433 :: 		lcd_out(2,1,_Blank);
+;GC V2.c,436 :: 		lcd_out(2,1,_Blank);
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1043,9 +1045,9 @@ L_UpdateMenuText35:
 	MOVF        __Blank+1, 0 
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,434 :: 		break;
+;GC V2.c,437 :: 		break;
 	GOTO        L_UpdateMenuText28
-;GC V2.c,435 :: 		}
+;GC V2.c,438 :: 		}
 L_UpdateMenuText27:
 	MOVF        _MenuCounter+0, 0 
 	XORLW       0
@@ -1076,90 +1078,90 @@ L_UpdateMenuText27:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_UpdateMenuText35
 L_UpdateMenuText28:
-;GC V2.c,436 :: 		}
+;GC V2.c,439 :: 		}
 	RETURN      0
 ; end of _UpdateMenuText
 
 _Menu1:
 
-;GC V2.c,450 :: 		void Menu1()
-;GC V2.c,452 :: 		UpdateMenuText();
+;GC V2.c,453 :: 		void Menu1()
+;GC V2.c,455 :: 		UpdateMenuText();
 	CALL        _UpdateMenuText+0, 0
-;GC V2.c,453 :: 		MenuState=2;
+;GC V2.c,456 :: 		MenuState=2;
 	MOVLW       2
 	MOVWF       _MenuState+0 
-;GC V2.c,454 :: 		}
+;GC V2.c,457 :: 		}
 	RETURN      0
 ; end of _Menu1
 
 _Menu2:
 
-;GC V2.c,464 :: 		void Menu2()
-;GC V2.c,468 :: 		LCDFlashFlag=0;
+;GC V2.c,467 :: 		void Menu2()
+;GC V2.c,471 :: 		LCDFlashFlag=0;
 	CLRF        _LCDFlashFlag+0 
-;GC V2.c,469 :: 		if(Keys & DOWN)
+;GC V2.c,472 :: 		if(Keys & DOWN)
 	BTFSS       _Keys+0, 2 
 	GOTO        L_Menu236
-;GC V2.c,471 :: 		if(MenuCounter>0)
+;GC V2.c,474 :: 		if(MenuCounter>0)
 	MOVF        _MenuCounter+0, 0 
 	SUBLW       0
 	BTFSC       STATUS+0, 0 
 	GOTO        L_Menu237
-;GC V2.c,472 :: 		MenuCounter=MenuCounter-1;
+;GC V2.c,475 :: 		MenuCounter=MenuCounter-1;
 	DECF        _MenuCounter+0, 1 
 	GOTO        L_Menu238
 L_Menu237:
-;GC V2.c,474 :: 		MenuCounter=MenuLevel;
+;GC V2.c,477 :: 		MenuCounter=MenuLevel;
 	MOVLW       6
 	MOVWF       _MenuCounter+0 
 L_Menu238:
-;GC V2.c,475 :: 		MenuState=1;
+;GC V2.c,478 :: 		MenuState=1;
 	MOVLW       1
 	MOVWF       _MenuState+0 
-;GC V2.c,476 :: 		}
+;GC V2.c,479 :: 		}
 L_Menu236:
-;GC V2.c,478 :: 		if(Keys & UP)
+;GC V2.c,481 :: 		if(Keys & UP)
 	BTFSS       _Keys+0, 1 
 	GOTO        L_Menu239
-;GC V2.c,480 :: 		if(MenuCounter<MenuLevel)
+;GC V2.c,483 :: 		if(MenuCounter<MenuLevel)
 	MOVLW       6
 	SUBWF       _MenuCounter+0, 0 
 	BTFSC       STATUS+0, 0 
 	GOTO        L_Menu240
-;GC V2.c,481 :: 		MenuCounter=MenuCounter+1;
+;GC V2.c,484 :: 		MenuCounter=MenuCounter+1;
 	INCF        _MenuCounter+0, 1 
 	GOTO        L_Menu241
 L_Menu240:
-;GC V2.c,483 :: 		MenuCounter=0;
+;GC V2.c,486 :: 		MenuCounter=0;
 	CLRF        _MenuCounter+0 
 L_Menu241:
-;GC V2.c,484 :: 		MenuState=1;
+;GC V2.c,487 :: 		MenuState=1;
 	MOVLW       1
 	MOVWF       _MenuState+0 
-;GC V2.c,485 :: 		}
+;GC V2.c,488 :: 		}
 L_Menu239:
-;GC V2.c,487 :: 		if(Keys & CENTER)
+;GC V2.c,490 :: 		if(Keys & CENTER)
 	BTFSS       _Keys+0, 0 
 	GOTO        L_Menu242
-;GC V2.c,488 :: 		MenuState=3;
+;GC V2.c,491 :: 		MenuState=3;
 	MOVLW       3
 	MOVWF       _MenuState+0 
 L_Menu242:
-;GC V2.c,489 :: 		}
+;GC V2.c,492 :: 		}
 	RETURN      0
 ; end of _Menu2
 
 _Menu3:
 
-;GC V2.c,498 :: 		void Menu3()
-;GC V2.c,500 :: 		LCDFlashFlag=1;
+;GC V2.c,501 :: 		void Menu3()
+;GC V2.c,503 :: 		LCDFlashFlag=1;
 	MOVLW       1
 	MOVWF       _LCDFlashFlag+0 
-;GC V2.c,501 :: 		switch(MenuCounter)
+;GC V2.c,504 :: 		switch(MenuCounter)
 	GOTO        L_Menu343
-;GC V2.c,503 :: 		case 0:
+;GC V2.c,506 :: 		case 0:
 L_Menu345:
-;GC V2.c,504 :: 		if(Keys & UP)     if(OpenningTime<255)  {OpenningTime=OpenningTime+1;UpdateMenuText();}
+;GC V2.c,507 :: 		if(Keys & UP)     if(OpenningTime<255)  {OpenningTime=OpenningTime+1;UpdateMenuText();}
 	BTFSS       _Keys+0, 1 
 	GOTO        L_Menu346
 	MOVLW       255
@@ -1170,7 +1172,7 @@ L_Menu345:
 	CALL        _UpdateMenuText+0, 0
 L_Menu347:
 L_Menu346:
-;GC V2.c,505 :: 		if(Keys & DOWN)   if(OpenningTime>0)    {OpenningTime=OpenningTime-1;UpdateMenuText();}
+;GC V2.c,508 :: 		if(Keys & DOWN)   if(OpenningTime>0)    {OpenningTime=OpenningTime-1;UpdateMenuText();}
 	BTFSS       _Keys+0, 2 
 	GOTO        L_Menu348
 	MOVF        _OpenningTime+0, 0 
@@ -1181,17 +1183,17 @@ L_Menu346:
 	CALL        _UpdateMenuText+0, 0
 L_Menu349:
 L_Menu348:
-;GC V2.c,506 :: 		if(Keys & CENTER) MenuState=1;
+;GC V2.c,509 :: 		if(Keys & CENTER) MenuState=1;
 	BTFSS       _Keys+0, 0 
 	GOTO        L_Menu350
 	MOVLW       1
 	MOVWF       _MenuState+0 
 L_Menu350:
-;GC V2.c,507 :: 		break;
+;GC V2.c,510 :: 		break;
 	GOTO        L_Menu344
-;GC V2.c,509 :: 		case 1:
+;GC V2.c,512 :: 		case 1:
 L_Menu351:
-;GC V2.c,510 :: 		if(Keys & UP)     if(ClosingTime<255)  {ClosingTime=ClosingTime+1;UpdateMenuText();}
+;GC V2.c,513 :: 		if(Keys & UP)     if(ClosingTime<255)  {ClosingTime=ClosingTime+1;UpdateMenuText();}
 	BTFSS       _Keys+0, 1 
 	GOTO        L_Menu352
 	MOVLW       255
@@ -1202,7 +1204,7 @@ L_Menu351:
 	CALL        _UpdateMenuText+0, 0
 L_Menu353:
 L_Menu352:
-;GC V2.c,511 :: 		if(Keys & DOWN)   if(ClosingTime>0)    {ClosingTime=ClosingTime-1;UpdateMenuText();}
+;GC V2.c,514 :: 		if(Keys & DOWN)   if(ClosingTime>0)    {ClosingTime=ClosingTime-1;UpdateMenuText();}
 	BTFSS       _Keys+0, 2 
 	GOTO        L_Menu354
 	MOVF        _ClosingTime+0, 0 
@@ -1213,17 +1215,17 @@ L_Menu352:
 	CALL        _UpdateMenuText+0, 0
 L_Menu355:
 L_Menu354:
-;GC V2.c,512 :: 		if(Keys & CENTER) MenuState=1;
+;GC V2.c,515 :: 		if(Keys & CENTER) MenuState=1;
 	BTFSS       _Keys+0, 0 
 	GOTO        L_Menu356
 	MOVLW       1
 	MOVWF       _MenuState+0 
 L_Menu356:
-;GC V2.c,513 :: 		break;
+;GC V2.c,516 :: 		break;
 	GOTO        L_Menu344
-;GC V2.c,515 :: 		case 2:
+;GC V2.c,518 :: 		case 2:
 L_Menu357:
-;GC V2.c,516 :: 		if(Keys & UP)     if(InvalidTime<255)  {InvalidTime=InvalidTime+1;UpdateMenuText();}
+;GC V2.c,519 :: 		if(Keys & UP)     if(InvalidTime<255)  {InvalidTime=InvalidTime+1;UpdateMenuText();}
 	BTFSS       _Keys+0, 1 
 	GOTO        L_Menu358
 	MOVLW       255
@@ -1234,7 +1236,7 @@ L_Menu357:
 	CALL        _UpdateMenuText+0, 0
 L_Menu359:
 L_Menu358:
-;GC V2.c,517 :: 		if(Keys & DOWN)   if(InvalidTime>0)    {InvalidTime=InvalidTime-1;UpdateMenuText();}
+;GC V2.c,520 :: 		if(Keys & DOWN)   if(InvalidTime>0)    {InvalidTime=InvalidTime-1;UpdateMenuText();}
 	BTFSS       _Keys+0, 2 
 	GOTO        L_Menu360
 	MOVF        _InvalidTime+0, 0 
@@ -1245,17 +1247,17 @@ L_Menu358:
 	CALL        _UpdateMenuText+0, 0
 L_Menu361:
 L_Menu360:
-;GC V2.c,518 :: 		if(Keys & CENTER) MenuState=1;
+;GC V2.c,521 :: 		if(Keys & CENTER) MenuState=1;
 	BTFSS       _Keys+0, 0 
 	GOTO        L_Menu362
 	MOVLW       1
 	MOVWF       _MenuState+0 
 L_Menu362:
-;GC V2.c,519 :: 		break;
+;GC V2.c,522 :: 		break;
 	GOTO        L_Menu344
-;GC V2.c,521 :: 		case 3:
+;GC V2.c,524 :: 		case 3:
 L_Menu363:
-;GC V2.c,522 :: 		if(Keys & UP)     if(AutocloseTime<255)  {AutocloseTime=AutocloseTime+1;UpdateMenuText();}
+;GC V2.c,525 :: 		if(Keys & UP)     if(AutocloseTime<255)  {AutocloseTime=AutocloseTime+1;UpdateMenuText();}
 	BTFSS       _Keys+0, 1 
 	GOTO        L_Menu364
 	MOVLW       255
@@ -1266,7 +1268,7 @@ L_Menu363:
 	CALL        _UpdateMenuText+0, 0
 L_Menu365:
 L_Menu364:
-;GC V2.c,523 :: 		if(Keys & DOWN)   if(AutocloseTime>0)    {AutocloseTime=AutocloseTime-1;UpdateMenuText();}
+;GC V2.c,526 :: 		if(Keys & DOWN)   if(AutocloseTime>0)    {AutocloseTime=AutocloseTime-1;UpdateMenuText();}
 	BTFSS       _Keys+0, 2 
 	GOTO        L_Menu366
 	MOVF        _AutocloseTime+0, 0 
@@ -1277,17 +1279,17 @@ L_Menu364:
 	CALL        _UpdateMenuText+0, 0
 L_Menu367:
 L_Menu366:
-;GC V2.c,524 :: 		if(Keys & CENTER) MenuState=1;
+;GC V2.c,527 :: 		if(Keys & CENTER) MenuState=1;
 	BTFSS       _Keys+0, 0 
 	GOTO        L_Menu368
 	MOVLW       1
 	MOVWF       _MenuState+0 
 L_Menu368:
-;GC V2.c,525 :: 		break;
+;GC V2.c,528 :: 		break;
 	GOTO        L_Menu344
-;GC V2.c,527 :: 		case 4:
+;GC V2.c,530 :: 		case 4:
 L_Menu369:
-;GC V2.c,528 :: 		if(Keys & UP)     if(NetworkAddress<255)  {NetworkAddress=NetworkAddress+1;UpdateMenuText();}
+;GC V2.c,531 :: 		if(Keys & UP)     if(NetworkAddress<255)  {NetworkAddress=NetworkAddress+1;UpdateMenuText();}
 	BTFSS       _Keys+0, 1 
 	GOTO        L_Menu370
 	MOVLW       255
@@ -1298,7 +1300,7 @@ L_Menu369:
 	CALL        _UpdateMenuText+0, 0
 L_Menu371:
 L_Menu370:
-;GC V2.c,529 :: 		if(Keys & DOWN)   if(NetworkAddress>0)    {NetworkAddress=NetworkAddress-1;UpdateMenuText();}
+;GC V2.c,532 :: 		if(Keys & DOWN)   if(NetworkAddress>0)    {NetworkAddress=NetworkAddress-1;UpdateMenuText();}
 	BTFSS       _Keys+0, 2 
 	GOTO        L_Menu372
 	MOVF        _NetworkAddress+0, 0 
@@ -1309,43 +1311,43 @@ L_Menu370:
 	CALL        _UpdateMenuText+0, 0
 L_Menu373:
 L_Menu372:
-;GC V2.c,530 :: 		if(Keys & CENTER) MenuState=1;
+;GC V2.c,533 :: 		if(Keys & CENTER) MenuState=1;
 	BTFSS       _Keys+0, 0 
 	GOTO        L_Menu374
 	MOVLW       1
 	MOVWF       _MenuState+0 
 L_Menu374:
-;GC V2.c,531 :: 		break;
+;GC V2.c,534 :: 		break;
 	GOTO        L_Menu344
-;GC V2.c,533 :: 		case 5:
+;GC V2.c,536 :: 		case 5:
 L_Menu375:
-;GC V2.c,534 :: 		if(Keys & CENTER) MenuState=0;
+;GC V2.c,537 :: 		if(Keys & CENTER) MenuState=0;
 	BTFSS       _Keys+0, 0 
 	GOTO        L_Menu376
 	CLRF        _MenuState+0 
 L_Menu376:
-;GC V2.c,535 :: 		{LCDFlashFlag=0;SaveConfig();MenuState=0;BuzzerCounter=20;}
+;GC V2.c,538 :: 		{LCDFlashFlag=0;SaveConfig();MenuState=0;BuzzerCounter=20;}
 	CLRF        _LCDFlashFlag+0 
 	CALL        _SaveConfig+0, 0
 	CLRF        _MenuState+0 
 	MOVLW       20
 	MOVWF       _BuzzerCounter+0 
-;GC V2.c,536 :: 		break;
+;GC V2.c,539 :: 		break;
 	GOTO        L_Menu344
-;GC V2.c,538 :: 		case 6:
+;GC V2.c,541 :: 		case 6:
 L_Menu377:
-;GC V2.c,539 :: 		if(Keys & CENTER) MenuState=0;
+;GC V2.c,542 :: 		if(Keys & CENTER) MenuState=0;
 	BTFSS       _Keys+0, 0 
 	GOTO        L_Menu378
 	CLRF        _MenuState+0 
 L_Menu378:
-;GC V2.c,540 :: 		{LCDFlashFlag=0;LoadConfig();MenuState=0;}
+;GC V2.c,543 :: 		{LCDFlashFlag=0;LoadConfig();MenuState=0;}
 	CLRF        _LCDFlashFlag+0 
 	CALL        _LoadConfig+0, 0
 	CLRF        _MenuState+0 
-;GC V2.c,541 :: 		break;
+;GC V2.c,544 :: 		break;
 	GOTO        L_Menu344
-;GC V2.c,542 :: 		}
+;GC V2.c,545 :: 		}
 L_Menu343:
 	MOVF        _MenuCounter+0, 0 
 	XORLW       0
@@ -1376,14 +1378,14 @@ L_Menu343:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_Menu377
 L_Menu344:
-;GC V2.c,546 :: 		}
+;GC V2.c,549 :: 		}
 	RETURN      0
 ; end of _Menu3
 
 _charValueToStr:
 
-;GC V2.c,561 :: 		void charValueToStr(char val, char * string)
-;GC V2.c,563 :: 		bytetostr(val>>1,string);
+;GC V2.c,564 :: 		void charValueToStr(char val, char * string)
+;GC V2.c,566 :: 		bytetostr(val>>1,string);
 	MOVF        FARG_charValueToStr_val+0, 0 
 	MOVWF       FARG_ByteToStr_input+0 
 	RRCF        FARG_ByteToStr_input+0, 1 
@@ -1393,7 +1395,7 @@ _charValueToStr:
 	MOVF        FARG_charValueToStr_string+1, 0 
 	MOVWF       FARG_ByteToStr_output+1 
 	CALL        _ByteToStr+0, 0
-;GC V2.c,564 :: 		if((val%2)==1)
+;GC V2.c,567 :: 		if((val%2)==1)
 	MOVLW       1
 	ANDWF       FARG_charValueToStr_val+0, 0 
 	MOVWF       R1 
@@ -1401,7 +1403,7 @@ _charValueToStr:
 	XORLW       1
 	BTFSS       STATUS+0, 2 
 	GOTO        L_charValueToStr79
-;GC V2.c,565 :: 		memcpy(string+3,".5s",4);
+;GC V2.c,568 :: 		memcpy(string+3,".5s",4);
 	MOVLW       3
 	ADDWF       FARG_charValueToStr_string+0, 0 
 	MOVWF       FARG_memcpy_d1+0 
@@ -1426,7 +1428,7 @@ _charValueToStr:
 	CALL        _memcpy+0, 0
 	GOTO        L_charValueToStr80
 L_charValueToStr79:
-;GC V2.c,567 :: 		memcpy(string+3,".0s",4);
+;GC V2.c,570 :: 		memcpy(string+3,".0s",4);
 	MOVLW       3
 	ADDWF       FARG_charValueToStr_string+0, 0 
 	MOVWF       FARG_memcpy_d1+0 
@@ -1450,18 +1452,18 @@ L_charValueToStr79:
 	MOVWF       FARG_memcpy_n+1 
 	CALL        _memcpy+0, 0
 L_charValueToStr80:
-;GC V2.c,568 :: 		}
+;GC V2.c,571 :: 		}
 	RETURN      0
 ; end of _charValueToStr
 
 _Sim0:
 
-;GC V2.c,591 :: 		void Sim0() // Close
-;GC V2.c,594 :: 		if(DoorActFlag)
+;GC V2.c,594 :: 		void Sim0() // Close
+;GC V2.c,597 :: 		if(DoorActFlag)
 	MOVF        _DoorActFlag+0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_Sim081
-;GC V2.c,596 :: 		SignalingSystem_AddSignal(&SigSys,OpenningTime,50); // OpenTime
+;GC V2.c,599 :: 		SignalingSystem_AddSignal(&SigSys,OpenningTime,50); // OpenTime
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1475,10 +1477,10 @@ _Sim0:
 	MOVLW       50
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	CALL        _SignalingSystem_AddSignal+0, 0
-;GC V2.c,597 :: 		DoorStatus=DOORSTATUS_Openning;
+;GC V2.c,600 :: 		DoorStatus=DOORSTATUS_Openning;
 	MOVLW       3
 	MOVWF       _DoorStatus+0 
-;GC V2.c,598 :: 		if((DisplayMode==0) && (MenuState==0))
+;GC V2.c,601 :: 		if((DisplayMode==0) && (MenuState==0))
 	MOVF        _DisplayMode+0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
@@ -1487,8 +1489,8 @@ _Sim0:
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Sim084
-L__Sim0139:
-;GC V2.c,600 :: 		LCD_out(2,1,"    Openning    ");
+L__Sim0153:
+;GC V2.c,603 :: 		LCD_out(2,1,"    Openning    ");
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1513,23 +1515,23 @@ L__Sim0139:
 	MOVLW       hi_addr(?lstr18_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,601 :: 		}
+;GC V2.c,604 :: 		}
 L_Sim084:
-;GC V2.c,602 :: 		SimStatus=1;
+;GC V2.c,605 :: 		SimStatus=1;
 	MOVLW       1
 	MOVWF       _SimStatus+0 
-;GC V2.c,603 :: 		DoorActFlag=0;
+;GC V2.c,606 :: 		DoorActFlag=0;
 	CLRF        _DoorActFlag+0 
-;GC V2.c,604 :: 		}
+;GC V2.c,607 :: 		}
 L_Sim081:
-;GC V2.c,605 :: 		}
+;GC V2.c,608 :: 		}
 	RETURN      0
 ; end of _Sim0
 
 _Sim1:
 
-;GC V2.c,620 :: 		void Sim1() // Openning
-;GC V2.c,622 :: 		if(SignalingSystem_CheckSignal(&SigSys,50))
+;GC V2.c,623 :: 		void Sim1() // Openning
+;GC V2.c,625 :: 		if(SignalingSystem_CheckSignal(&SigSys,50))
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_CheckSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1540,10 +1542,10 @@ _Sim1:
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_Sim185
-;GC V2.c,624 :: 		DoorStatus=DOORSTATUS_Open;
+;GC V2.c,627 :: 		DoorStatus=DOORSTATUS_Open;
 	MOVLW       1
 	MOVWF       _DoorStatus+0 
-;GC V2.c,625 :: 		if((DisplayMode==0) && (MenuState==0))
+;GC V2.c,628 :: 		if((DisplayMode==0) && (MenuState==0))
 	MOVF        _DisplayMode+0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
@@ -1552,8 +1554,8 @@ _Sim1:
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Sim188
-L__Sim1140:
-;GC V2.c,627 :: 		LCD_out(2,1,"     Opened     ");
+L__Sim1154:
+;GC V2.c,630 :: 		LCD_out(2,1,"     Opened     ");
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1578,12 +1580,12 @@ L__Sim1140:
 	MOVLW       hi_addr(?lstr19_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,628 :: 		}
+;GC V2.c,631 :: 		}
 L_Sim188:
-;GC V2.c,629 :: 		SimStatus=2;
+;GC V2.c,632 :: 		SimStatus=2;
 	MOVLW       2
 	MOVWF       _SimStatus+0 
-;GC V2.c,630 :: 		SignalingSystem_AddSignal(&SigSys,AutocloseTime-InvalidTime,51);//AutoClose - Invalid
+;GC V2.c,633 :: 		SignalingSystem_AddSignal(&SigSys,AutocloseTime-InvalidTime,51);//AutoClose - Invalid
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1602,16 +1604,16 @@ L_Sim188:
 	MOVLW       51
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	CALL        _SignalingSystem_AddSignal+0, 0
-;GC V2.c,631 :: 		}
+;GC V2.c,634 :: 		}
 L_Sim185:
-;GC V2.c,632 :: 		}
+;GC V2.c,635 :: 		}
 	RETURN      0
 ; end of _Sim1
 
 _Sim2:
 
-;GC V2.c,648 :: 		void Sim2() // Open
-;GC V2.c,650 :: 		if(SignalingSystem_CheckSignal(&SigSys,51))
+;GC V2.c,651 :: 		void Sim2() // Open
+;GC V2.c,653 :: 		if(SignalingSystem_CheckSignal(&SigSys,51))
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_CheckSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1622,9 +1624,9 @@ _Sim2:
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_Sim289
-;GC V2.c,652 :: 		DoorStatus=DOORSTATUS_Invalid;
+;GC V2.c,655 :: 		DoorStatus=DOORSTATUS_Invalid;
 	CLRF        _DoorStatus+0 
-;GC V2.c,653 :: 		if((DisplayMode==0) && (MenuState==0))
+;GC V2.c,656 :: 		if((DisplayMode==0) && (MenuState==0))
 	MOVF        _DisplayMode+0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
@@ -1633,8 +1635,8 @@ _Sim2:
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Sim292
-L__Sim2141:
-;GC V2.c,655 :: 		LCD_out(2,1,"    Invalid     ");
+L__Sim2155:
+;GC V2.c,658 :: 		LCD_out(2,1,"    Invalid     ");
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1659,12 +1661,12 @@ L__Sim2141:
 	MOVLW       hi_addr(?lstr20_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,656 :: 		}
+;GC V2.c,659 :: 		}
 L_Sim292:
-;GC V2.c,657 :: 		SimStatus=3;
+;GC V2.c,660 :: 		SimStatus=3;
 	MOVLW       3
 	MOVWF       _SimStatus+0 
-;GC V2.c,658 :: 		SignalingSystem_AddSignal(&SigSys,InvalidTime*2,52); // invalid time * 2
+;GC V2.c,661 :: 		SignalingSystem_AddSignal(&SigSys,InvalidTime*2,52); // invalid time * 2
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1684,7 +1686,7 @@ L_Sim292:
 	MOVLW       52
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	CALL        _SignalingSystem_AddSignal+0, 0
-;GC V2.c,659 :: 		SimTime=ms500+InvalidTime;
+;GC V2.c,662 :: 		SimTime=ms500+InvalidTime;
 	MOVF        _InvalidTime+0, 0 
 	ADDWF       _ms500+0, 0 
 	MOVWF       _SimTime+0 
@@ -1697,18 +1699,18 @@ L_Sim292:
 	MOVLW       0
 	ADDWFC      _ms500+3, 0 
 	MOVWF       _SimTime+3 
-;GC V2.c,660 :: 		DoorActFlag=0;
+;GC V2.c,663 :: 		DoorActFlag=0;
 	CLRF        _DoorActFlag+0 
-;GC V2.c,661 :: 		}
+;GC V2.c,664 :: 		}
 L_Sim289:
-;GC V2.c,662 :: 		}
+;GC V2.c,665 :: 		}
 	RETURN      0
 ; end of _Sim2
 
 _Sim3:
 
-;GC V2.c,685 :: 		void Sim3() // Invalid 1
-;GC V2.c,687 :: 		if(SignalingSystem_CheckSignal(&SigSys,52))
+;GC V2.c,688 :: 		void Sim3() // Invalid 1
+;GC V2.c,690 :: 		if(SignalingSystem_CheckSignal(&SigSys,52))
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_CheckSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1719,10 +1721,10 @@ _Sim3:
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_Sim393
-;GC V2.c,689 :: 		DoorStatus=DOORSTATUS_Closing;
+;GC V2.c,692 :: 		DoorStatus=DOORSTATUS_Closing;
 	MOVLW       4
 	MOVWF       _DoorStatus+0 
-;GC V2.c,690 :: 		if((DisplayMode==0) && (MenuState==0))
+;GC V2.c,693 :: 		if((DisplayMode==0) && (MenuState==0))
 	MOVF        _DisplayMode+0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
@@ -1731,8 +1733,8 @@ _Sim3:
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Sim396
-L__Sim3143:
-;GC V2.c,692 :: 		LCD_out(2,1,"    Closing     ");
+L__Sim3157:
+;GC V2.c,695 :: 		LCD_out(2,1,"    Closing     ");
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1757,12 +1759,12 @@ L__Sim3143:
 	MOVLW       hi_addr(?lstr21_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,693 :: 		}
+;GC V2.c,696 :: 		}
 L_Sim396:
-;GC V2.c,694 :: 		SimStatus=4;
+;GC V2.c,697 :: 		SimStatus=4;
 	MOVLW       4
 	MOVWF       _SimStatus+0 
-;GC V2.c,695 :: 		SignalingSystem_AddSignal(&SigSys,ClosingTime-(InvalidTime*2),53); // closing time - invalid time * 2
+;GC V2.c,698 :: 		SignalingSystem_AddSignal(&SigSys,ClosingTime-(InvalidTime*2),53); // closing time - invalid time * 2
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1789,12 +1791,12 @@ L_Sim396:
 	MOVLW       53
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	CALL        _SignalingSystem_AddSignal+0, 0
-;GC V2.c,696 :: 		}
+;GC V2.c,699 :: 		}
 L_Sim393:
-;GC V2.c,698 :: 		if(!IRin)
+;GC V2.c,701 :: 		if(!IRin)
 	BTFSC       PORTC+0, 0 
 	GOTO        L_Sim397
-;GC V2.c,700 :: 		SignalingSystem_ClearSignal(&SigSys,53);
+;GC V2.c,703 :: 		SignalingSystem_ClearSignal(&SigSys,53);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1802,7 +1804,7 @@ L_Sim393:
 	MOVLW       53
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	CALL        _SignalingSystem_ClearSignal+0, 0
-;GC V2.c,701 :: 		SignalingSystem_ClearSignal(&SigSys,52);
+;GC V2.c,704 :: 		SignalingSystem_ClearSignal(&SigSys,52);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1810,10 +1812,10 @@ L_Sim393:
 	MOVLW       52
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	CALL        _SignalingSystem_ClearSignal+0, 0
-;GC V2.c,702 :: 		DoorStatus=DOORSTATUS_Openning;
+;GC V2.c,705 :: 		DoorStatus=DOORSTATUS_Openning;
 	MOVLW       3
 	MOVWF       _DoorStatus+0 
-;GC V2.c,703 :: 		if((DisplayMode==0) && (MenuState==0))
+;GC V2.c,706 :: 		if((DisplayMode==0) && (MenuState==0))
 	MOVF        _DisplayMode+0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
@@ -1822,8 +1824,8 @@ L_Sim393:
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Sim3100
-L__Sim3142:
-;GC V2.c,705 :: 		LCD_out(2,1,"    Openning    ");
+L__Sim3156:
+;GC V2.c,708 :: 		LCD_out(2,1,"    Openning    ");
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1848,12 +1850,12 @@ L__Sim3142:
 	MOVLW       hi_addr(?lstr22_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,706 :: 		}
+;GC V2.c,709 :: 		}
 L_Sim3100:
-;GC V2.c,707 :: 		SimStatus=1;
+;GC V2.c,710 :: 		SimStatus=1;
 	MOVLW       1
 	MOVWF       _SimStatus+0 
-;GC V2.c,708 :: 		SignalingSystem_AddSignal(&SigSys,InvalidTime,50);
+;GC V2.c,711 :: 		SignalingSystem_AddSignal(&SigSys,InvalidTime,50);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1867,16 +1869,16 @@ L_Sim3100:
 	MOVLW       50
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	CALL        _SignalingSystem_AddSignal+0, 0
-;GC V2.c,709 :: 		}
+;GC V2.c,712 :: 		}
 L_Sim397:
-;GC V2.c,710 :: 		}
+;GC V2.c,713 :: 		}
 	RETURN      0
 ; end of _Sim3
 
 _Sim4:
 
-;GC V2.c,731 :: 		void Sim4() // Closing
-;GC V2.c,733 :: 		if(SignalingSystem_CheckSignal(&SigSys,53))
+;GC V2.c,734 :: 		void Sim4() // Closing
+;GC V2.c,736 :: 		if(SignalingSystem_CheckSignal(&SigSys,53))
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_CheckSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1887,9 +1889,9 @@ _Sim4:
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_Sim4101
-;GC V2.c,735 :: 		DoorStatus=DOORSTATUS_Invalid;
+;GC V2.c,738 :: 		DoorStatus=DOORSTATUS_Invalid;
 	CLRF        _DoorStatus+0 
-;GC V2.c,736 :: 		if((DisplayMode==0) && (MenuState==0))
+;GC V2.c,739 :: 		if((DisplayMode==0) && (MenuState==0))
 	MOVF        _DisplayMode+0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
@@ -1898,8 +1900,8 @@ _Sim4:
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Sim4104
-L__Sim4146:
-;GC V2.c,738 :: 		LCD_out(2,1,"    Invalid     ");
+L__Sim4160:
+;GC V2.c,741 :: 		LCD_out(2,1,"    Invalid     ");
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1924,12 +1926,12 @@ L__Sim4146:
 	MOVLW       hi_addr(?lstr23_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,739 :: 		}
+;GC V2.c,742 :: 		}
 L_Sim4104:
-;GC V2.c,740 :: 		SimStatus=5;
+;GC V2.c,743 :: 		SimStatus=5;
 	MOVLW       5
 	MOVWF       _SimStatus+0 
-;GC V2.c,741 :: 		SignalingSystem_AddSignal(&SigSys,(InvalidTime*2),54); // invalid time * 2
+;GC V2.c,744 :: 		SignalingSystem_AddSignal(&SigSys,(InvalidTime*2),54); // invalid time * 2
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1949,12 +1951,12 @@ L_Sim4104:
 	MOVLW       54
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	CALL        _SignalingSystem_AddSignal+0, 0
-;GC V2.c,742 :: 		}
+;GC V2.c,745 :: 		}
 L_Sim4101:
-;GC V2.c,744 :: 		if(!IRin)
+;GC V2.c,747 :: 		if(!IRin)
 	BTFSC       PORTC+0, 0 
 	GOTO        L_Sim4105
-;GC V2.c,746 :: 		SignalingSystem_ClearSignal(&SigSys,53);
+;GC V2.c,749 :: 		SignalingSystem_ClearSignal(&SigSys,53);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1962,7 +1964,7 @@ L_Sim4101:
 	MOVLW       53
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	CALL        _SignalingSystem_ClearSignal+0, 0
-;GC V2.c,747 :: 		SignalingSystem_ClearSignal(&SigSys,54);
+;GC V2.c,750 :: 		SignalingSystem_ClearSignal(&SigSys,54);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -1970,10 +1972,10 @@ L_Sim4101:
 	MOVLW       54
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	CALL        _SignalingSystem_ClearSignal+0, 0
-;GC V2.c,748 :: 		DoorStatus=DOORSTATUS_Openning;
+;GC V2.c,751 :: 		DoorStatus=DOORSTATUS_Openning;
 	MOVLW       3
 	MOVWF       _DoorStatus+0 
-;GC V2.c,749 :: 		if((DisplayMode==0) && (MenuState==0))
+;GC V2.c,752 :: 		if((DisplayMode==0) && (MenuState==0))
 	MOVF        _DisplayMode+0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
@@ -1982,8 +1984,8 @@ L_Sim4101:
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Sim4108
-L__Sim4145:
-;GC V2.c,751 :: 		LCD_out(2,1,"    Openning    ");
+L__Sim4159:
+;GC V2.c,754 :: 		LCD_out(2,1,"    Openning    ");
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -2008,12 +2010,12 @@ L__Sim4145:
 	MOVLW       hi_addr(?lstr24_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,752 :: 		}
+;GC V2.c,755 :: 		}
 L_Sim4108:
-;GC V2.c,753 :: 		SimStatus=1;
+;GC V2.c,756 :: 		SimStatus=1;
 	MOVLW       1
 	MOVWF       _SimStatus+0 
-;GC V2.c,754 :: 		SignalingSystem_AddSignal(&SigSys,ms500-SimTime,50);
+;GC V2.c,757 :: 		SignalingSystem_AddSignal(&SigSys,ms500-SimTime,50);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -2037,13 +2039,13 @@ L_Sim4108:
 	MOVLW       50
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	CALL        _SignalingSystem_AddSignal+0, 0
-;GC V2.c,755 :: 		}
+;GC V2.c,758 :: 		}
 L_Sim4105:
-;GC V2.c,757 :: 		if(DoorActFlag)
+;GC V2.c,760 :: 		if(DoorActFlag)
 	MOVF        _DoorActFlag+0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_Sim4109
-;GC V2.c,759 :: 		SignalingSystem_ClearSignal(&SigSys,53);
+;GC V2.c,762 :: 		SignalingSystem_ClearSignal(&SigSys,53);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -2051,7 +2053,7 @@ L_Sim4105:
 	MOVLW       53
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	CALL        _SignalingSystem_ClearSignal+0, 0
-;GC V2.c,760 :: 		SignalingSystem_ClearSignal(&SigSys,54);
+;GC V2.c,763 :: 		SignalingSystem_ClearSignal(&SigSys,54);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -2059,10 +2061,10 @@ L_Sim4105:
 	MOVLW       54
 	MOVWF       FARG_SignalingSystem_ClearSignal+0 
 	CALL        _SignalingSystem_ClearSignal+0, 0
-;GC V2.c,761 :: 		DoorStatus=DOORSTATUS_Openning;
+;GC V2.c,764 :: 		DoorStatus=DOORSTATUS_Openning;
 	MOVLW       3
 	MOVWF       _DoorStatus+0 
-;GC V2.c,762 :: 		if((DisplayMode==0) && (MenuState==0))
+;GC V2.c,765 :: 		if((DisplayMode==0) && (MenuState==0))
 	MOVF        _DisplayMode+0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
@@ -2071,8 +2073,8 @@ L_Sim4105:
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Sim4112
-L__Sim4144:
-;GC V2.c,764 :: 		LCD_out(2,1,"    Openning    ");
+L__Sim4158:
+;GC V2.c,767 :: 		LCD_out(2,1,"    Openning    ");
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -2097,12 +2099,12 @@ L__Sim4144:
 	MOVLW       hi_addr(?lstr25_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,765 :: 		}
+;GC V2.c,768 :: 		}
 L_Sim4112:
-;GC V2.c,766 :: 		SimStatus=1;
+;GC V2.c,769 :: 		SimStatus=1;
 	MOVLW       1
 	MOVWF       _SimStatus+0 
-;GC V2.c,767 :: 		SignalingSystem_AddSignal(&SigSys,ms500-SimTime,50);
+;GC V2.c,770 :: 		SignalingSystem_AddSignal(&SigSys,ms500-SimTime,50);
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -2126,18 +2128,18 @@ L_Sim4112:
 	MOVLW       50
 	MOVWF       FARG_SignalingSystem_AddSignal+0 
 	CALL        _SignalingSystem_AddSignal+0, 0
-;GC V2.c,768 :: 		DoorActFlag=0;
+;GC V2.c,771 :: 		DoorActFlag=0;
 	CLRF        _DoorActFlag+0 
-;GC V2.c,769 :: 		}
+;GC V2.c,772 :: 		}
 L_Sim4109:
-;GC V2.c,770 :: 		}
+;GC V2.c,773 :: 		}
 	RETURN      0
 ; end of _Sim4
 
 _Sim5:
 
-;GC V2.c,787 :: 		void Sim5() // Invalid 2
-;GC V2.c,789 :: 		if(SignalingSystem_CheckSignal(&SigSys,54))
+;GC V2.c,790 :: 		void Sim5() // Invalid 2
+;GC V2.c,792 :: 		if(SignalingSystem_CheckSignal(&SigSys,54))
 	MOVLW       _SigSys+0
 	MOVWF       FARG_SignalingSystem_CheckSignal+0 
 	MOVLW       hi_addr(_SigSys+0)
@@ -2148,10 +2150,10 @@ _Sim5:
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_Sim5113
-;GC V2.c,791 :: 		DoorStatus=DOORSTATUS_Close;
+;GC V2.c,794 :: 		DoorStatus=DOORSTATUS_Close;
 	MOVLW       2
 	MOVWF       _DoorStatus+0 
-;GC V2.c,792 :: 		if((DisplayMode==0) && (MenuState==0))
+;GC V2.c,795 :: 		if((DisplayMode==0) && (MenuState==0))
 	MOVF        _DisplayMode+0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
@@ -2160,8 +2162,8 @@ _Sim5:
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Sim5116
-L__Sim5147:
-;GC V2.c,794 :: 		LCD_out(2,1,"     Closed     ");
+L__Sim5161:
+;GC V2.c,797 :: 		LCD_out(2,1,"     Closed     ");
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -2186,58 +2188,58 @@ L__Sim5147:
 	MOVLW       hi_addr(?lstr26_GC_32V2+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;GC V2.c,795 :: 		}
-L_Sim5116:
-;GC V2.c,796 :: 		SimStatus=0;
-	CLRF        _SimStatus+0 
-;GC V2.c,797 :: 		}
-L_Sim5113:
 ;GC V2.c,798 :: 		}
+L_Sim5116:
+;GC V2.c,799 :: 		SimStatus=0;
+	CLRF        _SimStatus+0 
+;GC V2.c,800 :: 		}
+L_Sim5113:
+;GC V2.c,801 :: 		}
 	RETURN      0
 ; end of _Sim5
 
 _DoorSimulator:
 
-;GC V2.c,817 :: 		void DoorSimulator()
-;GC V2.c,819 :: 		switch(SimStatus)
+;GC V2.c,820 :: 		void DoorSimulator()
+;GC V2.c,822 :: 		switch(SimStatus)
 	GOTO        L_DoorSimulator117
-;GC V2.c,821 :: 		case 0:
+;GC V2.c,824 :: 		case 0:
 L_DoorSimulator119:
-;GC V2.c,822 :: 		Sim0();
+;GC V2.c,825 :: 		Sim0();
 	CALL        _Sim0+0, 0
-;GC V2.c,823 :: 		break;
+;GC V2.c,826 :: 		break;
 	GOTO        L_DoorSimulator118
-;GC V2.c,825 :: 		case 1:
+;GC V2.c,828 :: 		case 1:
 L_DoorSimulator120:
-;GC V2.c,826 :: 		Sim1();
+;GC V2.c,829 :: 		Sim1();
 	CALL        _Sim1+0, 0
-;GC V2.c,827 :: 		break;
+;GC V2.c,830 :: 		break;
 	GOTO        L_DoorSimulator118
-;GC V2.c,829 :: 		case 2:
+;GC V2.c,832 :: 		case 2:
 L_DoorSimulator121:
-;GC V2.c,830 :: 		Sim2();
+;GC V2.c,833 :: 		Sim2();
 	CALL        _Sim2+0, 0
-;GC V2.c,831 :: 		break;
+;GC V2.c,834 :: 		break;
 	GOTO        L_DoorSimulator118
-;GC V2.c,833 :: 		case 3:
+;GC V2.c,836 :: 		case 3:
 L_DoorSimulator122:
-;GC V2.c,834 :: 		Sim3();
+;GC V2.c,837 :: 		Sim3();
 	CALL        _Sim3+0, 0
-;GC V2.c,835 :: 		break;
+;GC V2.c,838 :: 		break;
 	GOTO        L_DoorSimulator118
-;GC V2.c,837 :: 		case 4:
+;GC V2.c,840 :: 		case 4:
 L_DoorSimulator123:
-;GC V2.c,838 :: 		Sim4();
+;GC V2.c,841 :: 		Sim4();
 	CALL        _Sim4+0, 0
-;GC V2.c,839 :: 		break;
+;GC V2.c,842 :: 		break;
 	GOTO        L_DoorSimulator118
-;GC V2.c,841 :: 		case 5:
+;GC V2.c,844 :: 		case 5:
 L_DoorSimulator124:
-;GC V2.c,842 :: 		Sim5();
+;GC V2.c,845 :: 		Sim5();
 	CALL        _Sim5+0, 0
-;GC V2.c,843 :: 		break;
+;GC V2.c,846 :: 		break;
 	GOTO        L_DoorSimulator118
-;GC V2.c,844 :: 		}
+;GC V2.c,847 :: 		}
 L_DoorSimulator117:
 	MOVF        _SimStatus+0, 0 
 	XORLW       0
@@ -2264,20 +2266,20 @@ L_DoorSimulator117:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_DoorSimulator124
 L_DoorSimulator118:
-;GC V2.c,845 :: 		}
+;GC V2.c,848 :: 		}
 	RETURN      0
 ; end of _DoorSimulator
 
 _SaveConfig:
 
-;GC V2.c,858 :: 		void SaveConfig()
-;GC V2.c,860 :: 		eeprom_write(0,OpenningTime);
+;GC V2.c,861 :: 		void SaveConfig()
+;GC V2.c,863 :: 		eeprom_write(0,OpenningTime);
 	CLRF        FARG_EEPROM_Write_address+0 
 	CLRF        FARG_EEPROM_Write_address+1 
 	MOVF        _OpenningTime+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;GC V2.c,861 :: 		eeprom_write(1,ClosingTime);
+;GC V2.c,864 :: 		eeprom_write(1,ClosingTime);
 	MOVLW       1
 	MOVWF       FARG_EEPROM_Write_address+0 
 	MOVLW       0
@@ -2285,7 +2287,7 @@ _SaveConfig:
 	MOVF        _ClosingTime+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;GC V2.c,862 :: 		eeprom_write(2,InvalidTime);
+;GC V2.c,865 :: 		eeprom_write(2,InvalidTime);
 	MOVLW       2
 	MOVWF       FARG_EEPROM_Write_address+0 
 	MOVLW       0
@@ -2293,7 +2295,7 @@ _SaveConfig:
 	MOVF        _InvalidTime+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;GC V2.c,863 :: 		eeprom_write(3,AutocloseTime);
+;GC V2.c,866 :: 		eeprom_write(3,AutocloseTime);
 	MOVLW       3
 	MOVWF       FARG_EEPROM_Write_address+0 
 	MOVLW       0
@@ -2301,7 +2303,7 @@ _SaveConfig:
 	MOVF        _AutocloseTime+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;GC V2.c,864 :: 		eeprom_write(4,NetworkAddress);
+;GC V2.c,867 :: 		eeprom_write(4,NetworkAddress);
 	MOVLW       4
 	MOVWF       FARG_EEPROM_Write_address+0 
 	MOVLW       0
@@ -2309,24 +2311,24 @@ _SaveConfig:
 	MOVF        _NetworkAddress+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;GC V2.c,865 :: 		RS485Slave_Init(NetworkAddress);
+;GC V2.c,868 :: 		RS485Slave_Init(NetworkAddress);
 	MOVF        _NetworkAddress+0, 0 
 	MOVWF       FARG_RS485Slave_Init_slave_address+0 
 	CALL        _RS485Slave_Init+0, 0
-;GC V2.c,866 :: 		}
+;GC V2.c,869 :: 		}
 	RETURN      0
 ; end of _SaveConfig
 
 _LoadConfig:
 
-;GC V2.c,876 :: 		void LoadConfig()
-;GC V2.c,878 :: 		OpenningTime=eeprom_read(0);
+;GC V2.c,879 :: 		void LoadConfig()
+;GC V2.c,881 :: 		OpenningTime=eeprom_read(0);
 	CLRF        FARG_EEPROM_Read_address+0 
 	CLRF        FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _OpenningTime+0 
-;GC V2.c,879 :: 		ClosingTime=eeprom_read(1);
+;GC V2.c,882 :: 		ClosingTime=eeprom_read(1);
 	MOVLW       1
 	MOVWF       FARG_EEPROM_Read_address+0 
 	MOVLW       0
@@ -2334,7 +2336,7 @@ _LoadConfig:
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _ClosingTime+0 
-;GC V2.c,880 :: 		InvalidTime=eeprom_read(2);
+;GC V2.c,883 :: 		InvalidTime=eeprom_read(2);
 	MOVLW       2
 	MOVWF       FARG_EEPROM_Read_address+0 
 	MOVLW       0
@@ -2342,7 +2344,7 @@ _LoadConfig:
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _InvalidTime+0 
-;GC V2.c,881 :: 		AutocloseTime=eeprom_read(3);
+;GC V2.c,884 :: 		AutocloseTime=eeprom_read(3);
 	MOVLW       3
 	MOVWF       FARG_EEPROM_Read_address+0 
 	MOVLW       0
@@ -2350,7 +2352,7 @@ _LoadConfig:
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _AutocloseTime+0 
-;GC V2.c,882 :: 		NetworkAddress=eeprom_read(4);
+;GC V2.c,885 :: 		NetworkAddress=eeprom_read(4);
 	MOVLW       4
 	MOVWF       FARG_EEPROM_Read_address+0 
 	MOVLW       0
@@ -2358,25 +2360,25 @@ _LoadConfig:
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _NetworkAddress+0 
-;GC V2.c,883 :: 		}
+;GC V2.c,886 :: 		}
 	RETURN      0
 ; end of _LoadConfig
 
 _FlashLCD:
 
-;GC V2.c,896 :: 		void FlashLCD()
-;GC V2.c,900 :: 		if(LCDFlashFlag)
+;GC V2.c,899 :: 		void FlashLCD()
+;GC V2.c,903 :: 		if(LCDFlashFlag)
 	MOVF        _LCDFlashFlag+0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_FlashLCD125
-;GC V2.c,902 :: 		PrevLCDFlashState=LCDFlashFlag;
+;GC V2.c,905 :: 		PrevLCDFlashState=LCDFlashFlag;
 	MOVF        _LCDFlashFlag+0, 0 
 	MOVWF       FlashLCD_PrevLCDFlashState_L0+0 
-;GC V2.c,903 :: 		if(LCDFlashState)
+;GC V2.c,906 :: 		if(LCDFlashState)
 	MOVF        _LCDFlashState+0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_FlashLCD126
-;GC V2.c,905 :: 		LCD_chr(2,1,'>');LCD_chr(2,2,'>');LCD_chr(2,3,'>');
+;GC V2.c,908 :: 		LCD_chr(2,1,'>');LCD_chr(2,2,'>');LCD_chr(2,3,'>');
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       1
@@ -2398,7 +2400,7 @@ _FlashLCD:
 	MOVLW       62
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;GC V2.c,906 :: 		LCD_chr(2,16,'<');LCD_chr(2,15,'<');LCD_chr(2,14,'<');
+;GC V2.c,909 :: 		LCD_chr(2,16,'<');LCD_chr(2,15,'<');LCD_chr(2,14,'<');
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       16
@@ -2420,10 +2422,10 @@ _FlashLCD:
 	MOVLW       60
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;GC V2.c,907 :: 		}
+;GC V2.c,910 :: 		}
 	GOTO        L_FlashLCD127
 L_FlashLCD126:
-;GC V2.c,910 :: 		LCD_chr(2,1,' ');LCD_chr(2,2,' ');LCD_chr(2,3,' ');
+;GC V2.c,913 :: 		LCD_chr(2,1,' ');LCD_chr(2,2,' ');LCD_chr(2,3,' ');
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       1
@@ -2445,7 +2447,7 @@ L_FlashLCD126:
 	MOVLW       32
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;GC V2.c,911 :: 		LCD_chr(2,16,' ');LCD_chr(2,15,' ');LCD_chr(2,14,' ');
+;GC V2.c,914 :: 		LCD_chr(2,16,' ');LCD_chr(2,15,' ');LCD_chr(2,14,' ');
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       16
@@ -2467,16 +2469,16 @@ L_FlashLCD126:
 	MOVLW       32
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;GC V2.c,912 :: 		}
+;GC V2.c,915 :: 		}
 L_FlashLCD127:
-;GC V2.c,913 :: 		}
+;GC V2.c,916 :: 		}
 	GOTO        L_FlashLCD128
 L_FlashLCD125:
-;GC V2.c,916 :: 		if(PrevLCDFlashState)
+;GC V2.c,919 :: 		if(PrevLCDFlashState)
 	MOVF        FlashLCD_PrevLCDFlashState_L0+0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_FlashLCD129
-;GC V2.c,918 :: 		LCD_chr(2,1,' ');LCD_chr(2,2,' ');LCD_chr(2,3,' ');
+;GC V2.c,921 :: 		LCD_chr(2,1,' ');LCD_chr(2,2,' ');LCD_chr(2,3,' ');
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       1
@@ -2498,7 +2500,7 @@ L_FlashLCD125:
 	MOVLW       32
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;GC V2.c,919 :: 		LCD_chr(2,16,' ');LCD_chr(2,15,' ');LCD_chr(2,14,' ');
+;GC V2.c,922 :: 		LCD_chr(2,16,' ');LCD_chr(2,15,' ');LCD_chr(2,14,' ');
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       16
@@ -2520,31 +2522,31 @@ L_FlashLCD125:
 	MOVLW       32
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;GC V2.c,920 :: 		}
+;GC V2.c,923 :: 		}
 L_FlashLCD129:
-;GC V2.c,921 :: 		PrevLCDFlashState=LCDFlashState;
+;GC V2.c,924 :: 		PrevLCDFlashState=LCDFlashState;
 	MOVF        _LCDFlashState+0, 0 
 	MOVWF       FlashLCD_PrevLCDFlashState_L0+0 
-;GC V2.c,922 :: 		}
+;GC V2.c,925 :: 		}
 L_FlashLCD128:
-;GC V2.c,923 :: 		}
+;GC V2.c,926 :: 		}
 	RETURN      0
 ; end of _FlashLCD
 
 _NetworkTask:
 
-;GC V2.c,931 :: 		void NetworkTask()
-;GC V2.c,933 :: 		if (NetBuffer[4]) {                    // upon completed valid message receive
+;GC V2.c,934 :: 		void NetworkTask()
+;GC V2.c,936 :: 		if (NetBuffer[4]) {                    // upon completed valid message receive
 	MOVF        _NetBuffer+4, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_NetworkTask130
-;GC V2.c,934 :: 		NetBuffer[4] = 0;                    //   data[4] is set to 0xFF
+;GC V2.c,937 :: 		NetBuffer[4] = 0;                    //   data[4] is set to 0xFF
 	CLRF        _NetBuffer+4 
-;GC V2.c,935 :: 		switch(NetBuffer[0])
+;GC V2.c,938 :: 		switch(NetBuffer[0])
 	GOTO        L_NetworkTask131
-;GC V2.c,937 :: 		case 1:
+;GC V2.c,940 :: 		case 1:
 L_NetworkTask133:
-;GC V2.c,938 :: 		LCTime=ms500;
+;GC V2.c,941 :: 		LCTime=ms500;
 	MOVF        _ms500+0, 0 
 	MOVWF       _LCTime+0 
 	MOVF        _ms500+1, 0 
@@ -2553,13 +2555,35 @@ L_NetworkTask133:
 	MOVWF       _LCTime+2 
 	MOVF        _ms500+3, 0 
 	MOVWF       _LCTime+3 
-;GC V2.c,939 :: 		OpenCommand=1;
+;GC V2.c,942 :: 		OpenCommand=1;
 	MOVLW       1
 	MOVWF       _OpenCommand+0 
-;GC V2.c,940 :: 		NetBuffer[0]=200;
+;GC V2.c,943 :: 		SignalingSystem_ClearSignal(&SigSys,1);
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_ClearSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_ClearSignal+1 
+	MOVLW       1
+	MOVWF       FARG_SignalingSystem_ClearSignal+0 
+	CALL        _SignalingSystem_ClearSignal+0, 0
+;GC V2.c,944 :: 		SignalingSystem_AddSignal(&SigSys,DoorOpenTime,1);
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_AddSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_AddSignal+1 
+	MOVLW       60
+	MOVWF       FARG_SignalingSystem_AddSignal+0 
+	MOVLW       0
+	MOVWF       FARG_SignalingSystem_AddSignal+1 
+	MOVWF       FARG_SignalingSystem_AddSignal+2 
+	MOVWF       FARG_SignalingSystem_AddSignal+3 
+	MOVLW       1
+	MOVWF       FARG_SignalingSystem_AddSignal+0 
+	CALL        _SignalingSystem_AddSignal+0, 0
+;GC V2.c,945 :: 		NetBuffer[0]=200;
 	MOVLW       200
 	MOVWF       _NetBuffer+0 
-;GC V2.c,941 :: 		Delay_ms(1);
+;GC V2.c,946 :: 		Delay_ms(1);
 	MOVLW       11
 	MOVWF       R12, 0
 	MOVLW       98
@@ -2570,7 +2594,7 @@ L_NetworkTask134:
 	DECFSZ      R12, 1, 0
 	BRA         L_NetworkTask134
 	NOP
-;GC V2.c,942 :: 		RS485Slave_Send(NetBuffer,1);
+;GC V2.c,947 :: 		RS485Slave_Send(NetBuffer,1);
 	MOVLW       _NetBuffer+0
 	MOVWF       FARG_RS485Slave_Send_data_buffer+0 
 	MOVLW       hi_addr(_NetBuffer+0)
@@ -2578,16 +2602,16 @@ L_NetworkTask134:
 	MOVLW       1
 	MOVWF       FARG_RS485Slave_Send_datalen+0 
 	CALL        _RS485Slave_Send+0, 0
-;GC V2.c,943 :: 		LED=1;
+;GC V2.c,948 :: 		LED=1;
 	BSF         PORTE+0, 0 
-;GC V2.c,944 :: 		break;
+;GC V2.c,949 :: 		break;
 	GOTO        L_NetworkTask132
-;GC V2.c,946 :: 		case 2:
+;GC V2.c,951 :: 		case 2:
 L_NetworkTask135:
-;GC V2.c,947 :: 		NetBuffer[0]=200;
+;GC V2.c,952 :: 		NetBuffer[0]=200;
 	MOVLW       200
 	MOVWF       _NetBuffer+0 
-;GC V2.c,948 :: 		Delay_ms(1);
+;GC V2.c,953 :: 		Delay_ms(1);
 	MOVLW       11
 	MOVWF       R12, 0
 	MOVLW       98
@@ -2598,7 +2622,7 @@ L_NetworkTask136:
 	DECFSZ      R12, 1, 0
 	BRA         L_NetworkTask136
 	NOP
-;GC V2.c,949 :: 		RS485Slave_Send(NetBuffer,1);
+;GC V2.c,954 :: 		RS485Slave_Send(NetBuffer,1);
 	MOVLW       _NetBuffer+0
 	MOVWF       FARG_RS485Slave_Send_data_buffer+0 
 	MOVLW       hi_addr(_NetBuffer+0)
@@ -2606,9 +2630,9 @@ L_NetworkTask136:
 	MOVLW       1
 	MOVWF       FARG_RS485Slave_Send_datalen+0 
 	CALL        _RS485Slave_Send+0, 0
-;GC V2.c,950 :: 		break;
+;GC V2.c,955 :: 		break;
 	GOTO        L_NetworkTask132
-;GC V2.c,951 :: 		}
+;GC V2.c,956 :: 		}
 L_NetworkTask131:
 	MOVF        _NetBuffer+0, 0 
 	XORLW       1
@@ -2619,8 +2643,207 @@ L_NetworkTask131:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_NetworkTask135
 L_NetworkTask132:
-;GC V2.c,952 :: 		}
+;GC V2.c,957 :: 		}
 L_NetworkTask130:
-;GC V2.c,954 :: 		}
+;GC V2.c,959 :: 		}
 	RETURN      0
 ; end of _NetworkTask
+
+_DoorManager:
+
+;GC V2.c,970 :: 		void DoorManager()
+;GC V2.c,980 :: 		if(SignalingSystem_CheckSignal(&SigSys,4))
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_CheckSignal+1 
+	MOVLW       4
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	CALL        _SignalingSystem_CheckSignal+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_DoorManager137
+;GC V2.c,981 :: 		Relay1=1;
+	BSF         PORTD+0, 3 
+L_DoorManager137:
+;GC V2.c,983 :: 		if(SignalingSystem_CheckSignal(&SigSys,5))
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_CheckSignal+1 
+	MOVLW       5
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	CALL        _SignalingSystem_CheckSignal+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_DoorManager138
+;GC V2.c,984 :: 		Relay1=0;
+	BCF         PORTD+0, 3 
+L_DoorManager138:
+;GC V2.c,986 :: 		if(SignalingSystem_CheckSignal(&SigSys,6))
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_CheckSignal+1 
+	MOVLW       6
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	CALL        _SignalingSystem_CheckSignal+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_DoorManager139
+;GC V2.c,987 :: 		Relay2=1;
+	BSF         PORTD+0, 2 
+L_DoorManager139:
+;GC V2.c,989 :: 		if(SignalingSystem_CheckSignal(&SigSys,7))
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_CheckSignal+1 
+	MOVLW       7
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	CALL        _SignalingSystem_CheckSignal+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_DoorManager140
+;GC V2.c,990 :: 		Relay2=0;
+	BCF         PORTD+0, 2 
+L_DoorManager140:
+;GC V2.c,992 :: 		if(SignalingSystem_CheckSignal(&SigSys,8))
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_CheckSignal+1 
+	MOVLW       8
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	CALL        _SignalingSystem_CheckSignal+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_DoorManager141
+;GC V2.c,993 :: 		Relay3=1;
+	BSF         PORTD+0, 1 
+L_DoorManager141:
+;GC V2.c,995 :: 		if(SignalingSystem_CheckSignal(&SigSys,9))
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_CheckSignal+1 
+	MOVLW       9
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	CALL        _SignalingSystem_CheckSignal+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_DoorManager142
+;GC V2.c,996 :: 		Relay3=0;
+	BCF         PORTD+0, 1 
+L_DoorManager142:
+;GC V2.c,1000 :: 		if(SignalingSystem_CheckSignal(&SigSys,1))
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_CheckSignal+1 
+	MOVLW       1
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	CALL        _SignalingSystem_CheckSignal+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_DoorManager143
+;GC V2.c,1001 :: 		OpenCommand=0;
+	CLRF        _OpenCommand+0 
+L_DoorManager143:
+;GC V2.c,1003 :: 		if(SignalingSystem_CheckSignal(&SigSys,2))
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_CheckSignal+1 
+	MOVLW       2
+	MOVWF       FARG_SignalingSystem_CheckSignal+0 
+	CALL        _SignalingSystem_CheckSignal+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_DoorManager144
+;GC V2.c,1004 :: 		ActionTaken=0;
+	CLRF        _ActionTaken+0 
+L_DoorManager144:
+;GC V2.c,1010 :: 		if((DoorStatus==DOORSTATUS_Close) && (OpenCommand) && (!ActionTaken))
+	MOVF        _DoorStatus+0, 0 
+	XORLW       2
+	BTFSS       STATUS+0, 2 
+	GOTO        L_DoorManager147
+	MOVF        _OpenCommand+0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_DoorManager147
+	MOVF        _ActionTaken+0, 1 
+	BTFSS       STATUS+0, 2 
+	GOTO        L_DoorManager147
+L__DoorManager163:
+;GC V2.c,1012 :: 		OpenWhenClosed();
+	CALL        _OpenWhenClosed+0, 0
+;GC V2.c,1013 :: 		ActionTaken=1;
+	MOVLW       1
+	MOVWF       _ActionTaken+0 
+;GC V2.c,1014 :: 		SignalingSystem_AddSignal(&SigSys,DoorActionDelay,2);
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_AddSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_AddSignal+1 
+	MOVLW       6
+	MOVWF       FARG_SignalingSystem_AddSignal+0 
+	MOVLW       0
+	MOVWF       FARG_SignalingSystem_AddSignal+1 
+	MOVWF       FARG_SignalingSystem_AddSignal+2 
+	MOVWF       FARG_SignalingSystem_AddSignal+3 
+	MOVLW       2
+	MOVWF       FARG_SignalingSystem_AddSignal+0 
+	CALL        _SignalingSystem_AddSignal+0, 0
+;GC V2.c,1015 :: 		}
+L_DoorManager147:
+;GC V2.c,1017 :: 		if((DoorStatus==DOORSTATUS_Closing) && (OpenCommand) && (!ActionTaken))
+	MOVF        _DoorStatus+0, 0 
+	XORLW       4
+	BTFSS       STATUS+0, 2 
+	GOTO        L_DoorManager150
+	MOVF        _OpenCommand+0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_DoorManager150
+	MOVF        _ActionTaken+0, 1 
+	BTFSS       STATUS+0, 2 
+	GOTO        L_DoorManager150
+L__DoorManager162:
+;GC V2.c,1019 :: 		OpenWhenClosing();
+	CALL        _OpenWhenClosing+0, 0
+;GC V2.c,1020 :: 		ActionTaken=1;
+	MOVLW       1
+	MOVWF       _ActionTaken+0 
+;GC V2.c,1021 :: 		SignalingSystem_AddSignal(&SigSys,DoorActionDelay,2);
+	MOVLW       _SigSys+0
+	MOVWF       FARG_SignalingSystem_AddSignal+0 
+	MOVLW       hi_addr(_SigSys+0)
+	MOVWF       FARG_SignalingSystem_AddSignal+1 
+	MOVLW       6
+	MOVWF       FARG_SignalingSystem_AddSignal+0 
+	MOVLW       0
+	MOVWF       FARG_SignalingSystem_AddSignal+1 
+	MOVWF       FARG_SignalingSystem_AddSignal+2 
+	MOVWF       FARG_SignalingSystem_AddSignal+3 
+	MOVLW       2
+	MOVWF       FARG_SignalingSystem_AddSignal+0 
+	CALL        _SignalingSystem_AddSignal+0, 0
+;GC V2.c,1022 :: 		}
+L_DoorManager150:
+;GC V2.c,1023 :: 		}
+	RETURN      0
+; end of _DoorManager
+
+_OpenWhenClosed:
+
+;GC V2.c,1049 :: 		void OpenWhenClosed()
+;GC V2.c,1058 :: 		}
+	RETURN      0
+; end of _OpenWhenClosed
+
+_OpenWhenClosing:
+
+;GC V2.c,1077 :: 		void OpenWhenClosing()
+;GC V2.c,1086 :: 		}
+	RETURN      0
+; end of _OpenWhenClosing

@@ -25,7 +25,7 @@
 #ifndef SIGNALINGMODULE
 #define SIGNALINGMODULE
 
-#define SignalQueueElements 20
+#define SignalQueueElements 30
 
 typedef struct
 {

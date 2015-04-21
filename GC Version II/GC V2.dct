@@ -262,6 +262,7 @@ acqt1
 acqt1_bit
 acqt2
 acqt2_bit
+actiontaken
 adc_get_sample
 adc_get_sample_ptr
 adc_init
@@ -1741,6 +1742,7 @@ dlc3_txb2dlc_bit
 done
 done_bit
 dooractflag
+doormanager
 doorsimulator
 doorstatus
 double2byte
@@ -3408,6 +3410,8 @@ oerr2
 oerr2_bit
 opencommand
 openningtime
+openwhenclosed
+openwhenclosing
 opmode0
 opmode0_bit
 opmode0_canstat_bit
